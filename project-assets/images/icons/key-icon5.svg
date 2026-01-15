@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="42.5" viewBox="0 0 50 42.5">
+  <g id="Group_1862" data-name="Group 1862" transform="translate(12886.5 9901.202)">
+    <g id="Group_1859" data-name="Group 1859" transform="translate(-12886 -9900.702)">
+      <rect id="Rectangle_296" data-name="Rectangle 296" width="49" height="18" rx="2" transform="translate(0 0)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <g id="Group_1857" data-name="Group 1857" transform="translate(5.247 2.564)">
+        <line id="Line_52" data-name="Line 52" x2="9.285" transform="translate(0 2.166)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+        <path id="Path_3177" data-name="Path 3177" d="M316.206,174.283a7.464,7.464,0,0,0,4.643-2.363,10.65,10.65,0,0,0,2.653-6.3" transform="translate(-315.543 -163.452)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <path id="Path_3178" data-name="Path 3178" d="M344.762,216.527a7.464,7.464,0,0,1-4.643-2.363,9,9,0,0,1-1.327-1.821" transform="translate(-336.14 -205.696)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line id="Line_53" data-name="Line 53" y1="2.166" transform="translate(4.642)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+      </g>
+      <line id="Line_54" data-name="Line 54" y2="17.048" transform="translate(19.127 0.452)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+      <g id="Group_1858" data-name="Group 1858" transform="translate(25.164 6.296)">
+        <line id="Line_55" data-name="Line 55" x2="16.934" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+        <line id="Line_56" data-name="Line 56" x2="8.386" transform="translate(0 5.555)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+      </g>
+    </g>
+    <g id="Group_1860" data-name="Group 1860" transform="translate(-12886 -9877.202)">
+      <rect id="Rectangle_296-2" data-name="Rectangle 296" width="48.689" height="18" rx="2" fill="none" stroke="#a69867" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line id="Line_54-2" data-name="Line 54" y2="17.694" transform="translate(19.127 0.305)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+      <g id="Group_1858-2" data-name="Group 1858" transform="translate(25.164 6.5)">
+        <line id="Line_55-2" data-name="Line 55" x2="16.934" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+        <line id="Line_56-2" data-name="Line 56" x2="8.386" transform="translate(0 5.555)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+      </g>
+      <g id="Group_1861" data-name="Group 1861" transform="translate(4.035 3.755)">
+        <g id="g2056" transform="translate(0 2.35)">
+          <path id="path2058" d="M0-100.4c2.386,0,4.316-2.8,4.316-6.266H1.439" transform="translate(0 106.666)" fill="none" stroke="#a69867" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        </g>
+        <g id="g2060" transform="translate(8.632 0)">
+          <path id="path2062" d="M0,0V10.965" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+        </g>
+        <g id="g2064" transform="translate(8.632 3.916)">
+          <path id="path2066" d="M0,0H2.158" fill="none" stroke="#a69867" stroke-linecap="round" stroke-width="1"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,123 @@
+@font-face {
+    font-family: 'Requiem';
+    src: url('../fonts/RequiemText-HTF-Roman.eot');
+    src: url('../fonts/RequiemText-HTF-Roman.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/RequiemText-HTF-Roman.woff2') format('woff2'),
+        url('../fonts/RequiemText-HTF-Roman.woff') format('woff'),
+        url('../fonts/RequiemText-HTF-Roman.ttf') format('truetype'),
+        url('../fonts/RequiemText-HTF-Roman.svg#RequiemText-HTF-Roman') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('../fonts/Gotham-Book.eot');
+    src: url('../fonts/Gotham-Book.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Gotham-Book.woff2') format('woff2'),
+        url('../fonts/Gotham-Book.woff') format('woff'),
+        url('../fonts/Gotham-Book.ttf') format('truetype'),
+        url('../fonts/Gotham-Book.svg#Gotham-Book') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham';
+    src: url('../fonts/Gotham-Bold.eot');
+    src: url('../fonts/Gotham-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Gotham-Bold.woff2') format('woff2'),
+        url('../fonts/Gotham-Bold.woff') format('woff'),
+        url('../fonts/Gotham-Bold.ttf') format('truetype'),
+        url('../fonts/Gotham-Bold.svg#Gotham-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham Extra';
+    src: url('../fonts/Gotham-ExtraLight.eot');
+    src: url('../fonts/Gotham-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Gotham-ExtraLight.woff2') format('woff2'),
+        url('../fonts/Gotham-ExtraLight.woff') format('woff'),
+        url('../fonts/Gotham-ExtraLight.ttf') format('truetype'),
+        url('../fonts/Gotham-ExtraLight.svg#Gotham-ExtraLight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham';
+    src: url('../fonts/Gotham-Light.eot');
+    src: url('../fonts/Gotham-Light.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Gotham-Light.woff2') format('woff2'),
+        url('../fonts/Gotham-Light.woff') format('woff'),
+        url('../fonts/Gotham-Light.ttf') format('truetype'),
+        url('../fonts/Gotham-Light.svg#Gotham-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham';
+    src: url('../fonts/Gotham-Medium.eot');
+    src: url('../fonts/Gotham-Medium.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Gotham-Medium.woff2') format('woff2'),
+        url('../fonts/Gotham-Medium.woff') format('woff'),
+        url('../fonts/Gotham-Medium.ttf') format('truetype'),
+        url('../fonts/Gotham-Medium.svg#Gotham-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Gotham';
+    src: url('../fonts/Gotham-Black.eot');
+    src: url('../fonts/Gotham-Black.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Gotham-Black.woff2') format('woff2'),
+        url('../fonts/Gotham-Black.woff') format('woff'),
+        url('../fonts/Gotham-Black.ttf') format('truetype'),
+        url('../fonts/Gotham-Black.svg#Gotham-Black') format('svg');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+
+
+
+@font-face {
+    font-family: 'Bembo Book MT Pro';
+    src: url('../fonts/BemboBookMTPro-Italic.eot');
+    src: url('../fonts/BemboBookMTPro-Italic.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/BemboBookMTPro-Italic.woff2') format('woff2'),
+        url('../fonts/BemboBookMTPro-Italic.woff') format('woff'),
+        url('../fonts/BemboBookMTPro-Italic.ttf') format('truetype'),
+        url('../fonts/BemboBookMTPro-Italic.svg#BemboBookMTPro-Italic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+
+@font-face {
+    font-family: 'Bembo Book MT Pro';
+    src: url('../fonts/BemboBookMTPro-Regular.eot');
+    src: url('../fonts/BemboBookMTPro-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/BemboBookMTPro-Regular.woff2') format('woff2'),
+        url('../fonts/BemboBookMTPro-Regular.woff') format('woff'),
+        url('../fonts/BemboBookMTPro-Regular.ttf') format('truetype'),
+        url('../fonts/BemboBookMTPro-Regular.svg#BemboBookMTPro-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

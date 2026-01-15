@@ -1,0 +1,269 @@
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Black.woff2') format('woff2'),
+        url('../fonts/Polymath-Black.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-BlackIt.woff2') format('woff2'),
+        url('../fonts/Polymath-BlackIt.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Bold.woff2') format('woff2'),
+        url('../fonts/Polymath-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-BoldIt.woff2') format('woff2'),
+        url('../fonts/Polymath-BoldIt.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Italic.woff2') format('woff2'),
+        url('../fonts/Polymath-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Light.woff2') format('woff2'),
+        url('../fonts/Polymath-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-LightIt.woff2') format('woff2'),
+        url('../fonts/Polymath-LightIt.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Medium.woff2') format('woff2'),
+        url('../fonts/Polymath-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-MediumIt.woff2') format('woff2'),
+        url('../fonts/Polymath-MediumIt.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Regular.woff2') format('woff2'),
+        url('../fonts/Polymath-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Semibold.woff2') format('woff2'),
+        url('../fonts/Polymath-Semibold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-SemiboldIt.woff2') format('woff2'),
+        url('../fonts/Polymath-SemiboldIt.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Super.woff2') format('woff2'),
+        url('../fonts/Polymath-Super.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-SuperIt.woff2') format('woff2'),
+        url('../fonts/Polymath-SuperIt.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-Thin.woff2') format('woff2'),
+        url('../fonts/Polymath-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-ThinIt.woff2') format('woff2'),
+        url('../fonts/Polymath-ThinIt.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-XLight.woff2') format('woff2'),
+        url('../fonts/Polymath-XLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Polymath';
+    src: url('../fonts/Polymath-XLightIt.woff2') format('woff2'),
+        url('../fonts/Polymath-XLightIt.woff') format('woff');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-Medium.eot');
+    src: url('../fonts/Mansory-Medium.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-Medium.woff2') format('woff2'),
+        url('../fonts/Mansory-Medium.woff') format('woff'),
+        url('../fonts/Mansory-Medium.ttf') format('truetype'),
+        url('../fonts/Mansory-Medium.svg#Mansory-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-Medium_1.eot');
+    src: url('../fonts/Mansory-Medium_1.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-Medium_1.woff2') format('woff2'),
+        url('../fonts/Mansory-Medium_1.woff') format('woff'),
+        url('../fonts/Mansory-Medium_1.ttf') format('truetype'),
+        url('../fonts/Mansory-Medium_1.svg#Mansory-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-SemiBold.eot');
+    src: url('../fonts/Mansory-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-SemiBold.woff2') format('woff2'),
+        url('../fonts/Mansory-SemiBold.woff') format('woff'),
+        url('../fonts/Mansory-SemiBold.ttf') format('truetype'),
+        url('../fonts/Mansory-SemiBold.svg#Mansory-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-SemiBold_1.eot');
+    src: url('../fonts/Mansory-SemiBold_1.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-SemiBold_1.woff2') format('woff2'),
+        url('../fonts/Mansory-SemiBold_1.woff') format('woff'),
+        url('../fonts/Mansory-SemiBold_1.ttf') format('truetype'),
+        url('../fonts/Mansory-SemiBold_1.svg#Mansory-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-Regular.eot');
+    src: url('../fonts/Mansory-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-Regular.woff2') format('woff2'),
+        url('../fonts/Mansory-Regular.woff') format('woff'),
+        url('../fonts/Mansory-Regular.ttf') format('truetype'),
+        url('../fonts/Mansory-Regular.svg#Mansory-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-Regular_1.eot');
+    src: url('../fonts/Mansory-Regular_1.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-Regular_1.woff2') format('woff2'),
+        url('../fonts/Mansory-Regular_1.woff') format('woff'),
+        url('../fonts/Mansory-Regular_1.ttf') format('truetype'),
+        url('../fonts/Mansory-Regular_1.svg#Mansory-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-Bold.eot');
+    src: url('../fonts/Mansory-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-Bold.woff2') format('woff2'),
+        url('../fonts/Mansory-Bold.woff') format('woff'),
+        url('../fonts/Mansory-Bold.ttf') format('truetype'),
+        url('../fonts/Mansory-Bold.svg#Mansory-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('../fonts/Mansory-Bold_1.eot');
+    src: url('../fonts/Mansory-Bold_1.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Mansory-Bold_1.woff2') format('woff2'),
+        url('../fonts/Mansory-Bold_1.woff') format('woff'),
+        url('../fonts/Mansory-Bold_1.ttf') format('truetype'),
+        url('../fonts/Mansory-Bold_1.svg#Mansory-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}

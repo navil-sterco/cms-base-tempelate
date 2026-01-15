@@ -1,0 +1,322 @@
+@font-face {
+  font-family: 'Nasalization';
+  src: url('../../../../assets/nasalization-rg.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.attachments {
+  width: 100px !important;
+  height: 100px !important;
+  box-shadow: 1px 5px 9px 0px #00000082;
+  object-fit: contain !important;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+.offcanvas.offcanvas-end {
+  transition: transform 0.35s ease-in-out;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+}
+
+.user-image {
+  width: 150px !important;
+  height: 150px !important;
+  box-shadow: 1px 5px 9px 0px #00000082;
+  object-fit: contain !important;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+.description-cell {
+  max-width: 400px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.menu .app-brand.demo {
+  height: 90px;
+  margin-top: 12px;
+}
+
+.page-builder-container {
+  background: #fff;
+  min-height: 100vh;
+}
+.card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.dynamic-zone-container {
+  background: #f6f6f9;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+.section-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.section-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.section-card.dragging {
+  opacity: 0.5;
+}
+.section-header {
+  background: rgba(102, 126, 234, 0.05);
+  /* border-bottom: 1px solid #e5e7eb; */
+}
+.item-card {
+  background: rgba(241, 245, 249, 0.5);
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+.item-card:hover {
+  background: rgba(241, 245, 249, 0.8);
+}
+.item-card.dragging {
+  opacity: 0.5;
+}
+.component-picker-card {
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+}
+.component-picker-header {
+  background: rgba(102, 126, 234, 0.1);
+  border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+}
+.component-btn {
+  border: 2px dashed #cbd5e1;
+  transition: all 0.3s ease;
+  min-height: 100px;
+}
+.component-btn:hover {
+  border-color: #667eea;
+  border-style: solid;
+  background: rgba(102, 126, 234, 0.05);
+  transform: translateY(-2px);
+}
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+}
+.btn-gradient:hover {
+  opacity: 0.9;
+  color: white;
+}
+.drag-handle {
+  cursor: grab;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+.badge-count {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+}
+.preview-image {
+  max-height: 100px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.position-badge {
+  background: #6c757d;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+}
+.item-position-badge {
+  background: #495057;
+  color: white;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 8px;
+}
+/* Tablet: 768px and below */
+@media (max-width: 768px) {
+  .section-header {
+    padding: 0.75rem !important;
+    min-height: auto !important;
+  }
+  
+  .section-header > .d-flex {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+  
+  .section-header .d-flex.align-items-center.gap-3 {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    width: 100%;
+  }
+  
+  .section-header .fw-semibold {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+  
+  .section-header .position-badge,
+  .section-header .badge-count {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* Mobile: 576px and below */
+@media (max-width: 576px) {
+  .section-header {
+    padding: 0.5rem !important;
+  }
+  
+  .section-header .d-flex.align-items-center.gap-3 {
+    gap: 0.25rem !important;
+  }
+  
+  .section-header .fw-semibold {
+    max-width: 150px;
+    font-size: 0.85rem;
+  }
+  
+  .section-header .position-badge,
+  .section-header .badge-count {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .section-header .btn-outline-danger {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Small mobile: 400px and below */
+@media (max-width: 400px) {
+  .section-header .fw-semibold {
+    max-width: 120px;
+  }
+  
+  .section-header .d-flex.align-items-center.gap-3 {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.modal-right .modal-dialog {
+  position: fixed;
+  margin: auto;
+  width: 600px;
+  max-width: 100vw;
+  height: 100%;
+  transform: translate3d(0%, 0, 0);
+}
+
+.modal-right .modal-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.modal-right {
+  right: 0;
+  left: auto;
+}
+
+.modal-right.fade .modal-dialog {
+  right: -600px;
+  transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal-right.show .modal-dialog {
+  right: 0;
+}
+
+
+.modal-right .modal-dialog {
+    position: fixed;
+    right: 0;
+    margin: 0;
+    width: 90%;
+    max-width: 1200px;
+    height: 100%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-right.show .modal-dialog {
+    transform: translateX(0);
+}
+
+.modal-right .modal-content {
+    height: 100%;
+    border-radius: 0;
+    border: none;
+}
+
+.section-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.space-y-3 > * + * {
+    margin-top: 0.75rem;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .modal-right .modal-dialog {
+        width: 100%;
+    }
+    .border-end {
+        border-right: none !important;
+        border-bottom: 1px solid #dee2e6;
+    }
+}
+
+.menu-list {
+  min-height: 100px;
+}
+.card {
+  transition: all 0.2s ease;
+}
+.card:hover {
+  border-color: #0d6efd;
+}
+.icon {
+  width: 16px;
+  height: 16px;
+}
+.icon-sm {
+  width: 14px;
+  height: 14px;
+}
+.icon-xs {
+  width: 12px;
+  height: 12px;
+}
+.icon-lg {
+  width: 48px;
+  height: 48px;
+}
+.inline-icon {
+  width: 12px;
+  height: 12px;
+  vertical-align: -1px;
+}

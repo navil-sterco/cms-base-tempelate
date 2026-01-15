@@ -1,0 +1,208 @@
+@font-face {
+    font-family: 'Mansory MediumOblique';
+    src: url('Mansory-MediumOblique.eot');
+    src: url('Mansory-MediumOblique.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-MediumOblique.woff2') format('woff2'),
+        url('Mansory-MediumOblique.woff') format('woff'),
+        url('Mansory-MediumOblique.ttf') format('truetype'),
+        url('Mansory-MediumOblique.svg#Mansory-MediumOblique') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory MediumOblique';
+    src: url('Mansory-MediumOblique_1.eot');
+    src: url('Mansory-MediumOblique_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-MediumOblique_1.woff2') format('woff2'),
+        url('Mansory-MediumOblique_1.woff') format('woff'),
+        url('Mansory-MediumOblique_1.ttf') format('truetype'),
+        url('Mansory-MediumOblique_1.svg#Mansory-MediumOblique') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-Medium.eot');
+    src: url('Mansory-Medium.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-Medium.woff2') format('woff2'),
+        url('Mansory-Medium.woff') format('woff'),
+        url('Mansory-Medium.ttf') format('truetype'),
+        url('Mansory-Medium.svg#Mansory-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory Oblique';
+    src: url('Mansory-RegularOblique.eot');
+    src: url('Mansory-RegularOblique.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-RegularOblique.woff2') format('woff2'),
+        url('Mansory-RegularOblique.woff') format('woff'),
+        url('Mansory-RegularOblique.ttf') format('truetype'),
+        url('Mansory-RegularOblique.svg#Mansory-RegularOblique') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-Medium_1.eot');
+    src: url('Mansory-Medium_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-Medium_1.woff2') format('woff2'),
+        url('Mansory-Medium_1.woff') format('woff'),
+        url('Mansory-Medium_1.ttf') format('truetype'),
+        url('Mansory-Medium_1.svg#Mansory-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory Oblique';
+    src: url('Mansory-RegularOblique_1.eot');
+    src: url('Mansory-RegularOblique_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-RegularOblique_1.woff2') format('woff2'),
+        url('Mansory-RegularOblique_1.woff') format('woff'),
+        url('Mansory-RegularOblique_1.ttf') format('truetype'),
+        url('Mansory-RegularOblique_1.svg#Mansory-RegularOblique') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory SemiBoldOblique';
+    src: url('Mansory-SemiBoldOblique.eot');
+    src: url('Mansory-SemiBoldOblique.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-SemiBoldOblique.woff2') format('woff2'),
+        url('Mansory-SemiBoldOblique.woff') format('woff'),
+        url('Mansory-SemiBoldOblique.ttf') format('truetype'),
+        url('Mansory-SemiBoldOblique.svg#Mansory-SemiBoldOblique') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory SemiBoldOblique';
+    src: url('Mansory-SemiBoldOblique_1.eot');
+    src: url('Mansory-SemiBoldOblique_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-SemiBoldOblique_1.woff2') format('woff2'),
+        url('Mansory-SemiBoldOblique_1.woff') format('woff'),
+        url('Mansory-SemiBoldOblique_1.ttf') format('truetype'),
+        url('Mansory-SemiBoldOblique_1.svg#Mansory-SemiBoldOblique') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-SemiBold.eot');
+    src: url('Mansory-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-SemiBold.woff2') format('woff2'),
+        url('Mansory-SemiBold.woff') format('woff'),
+        url('Mansory-SemiBold.ttf') format('truetype'),
+        url('Mansory-SemiBold.svg#Mansory-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-SemiBold_1.eot');
+    src: url('Mansory-SemiBold_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-SemiBold_1.woff2') format('woff2'),
+        url('Mansory-SemiBold_1.woff') format('woff'),
+        url('Mansory-SemiBold_1.ttf') format('truetype'),
+        url('Mansory-SemiBold_1.svg#Mansory-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-Regular.eot');
+    src: url('Mansory-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-Regular.woff2') format('woff2'),
+        url('Mansory-Regular.woff') format('woff'),
+        url('Mansory-Regular.ttf') format('truetype'),
+        url('Mansory-Regular.svg#Mansory-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-Regular_1.eot');
+    src: url('Mansory-Regular_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-Regular_1.woff2') format('woff2'),
+        url('Mansory-Regular_1.woff') format('woff'),
+        url('Mansory-Regular_1.ttf') format('truetype'),
+        url('Mansory-Regular_1.svg#Mansory-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory BoldOblique';
+    src: url('Mansory-BoldOblique.eot');
+    src: url('Mansory-BoldOblique.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-BoldOblique.woff2') format('woff2'),
+        url('Mansory-BoldOblique.woff') format('woff'),
+        url('Mansory-BoldOblique.ttf') format('truetype'),
+        url('Mansory-BoldOblique.svg#Mansory-BoldOblique') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory BoldOblique';
+    src: url('Mansory-BoldOblique_1.eot');
+    src: url('Mansory-BoldOblique_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-BoldOblique_1.woff2') format('woff2'),
+        url('Mansory-BoldOblique_1.woff') format('woff'),
+        url('Mansory-BoldOblique_1.ttf') format('truetype'),
+        url('Mansory-BoldOblique_1.svg#Mansory-BoldOblique') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-Bold.eot');
+    src: url('Mansory-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-Bold.woff2') format('woff2'),
+        url('Mansory-Bold.woff') format('woff'),
+        url('Mansory-Bold.ttf') format('truetype'),
+        url('Mansory-Bold.svg#Mansory-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mansory';
+    src: url('Mansory-Bold_1.eot');
+    src: url('Mansory-Bold_1.eot?#iefix') format('embedded-opentype'),
+        url('Mansory-Bold_1.woff2') format('woff2'),
+        url('Mansory-Bold_1.woff') format('woff'),
+        url('Mansory-Bold_1.ttf') format('truetype'),
+        url('Mansory-Bold_1.svg#Mansory-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

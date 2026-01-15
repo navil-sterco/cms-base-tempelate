@@ -1,0 +1,70 @@
+/* =========== max-width:1799 ============= */
+@media(max-width:1799px) {
+.eligibility-img {
+    margin-right: -32rem;
+}
+
+}
+
+/* =========== max-width:1580 ============= */
+@media(max-width:1580px) {
+    .eligibility-img {
+        margin-right: -30rem;
+    }
+
+}
+
+/* =========== max-width:1450 ============= */
+
+@media(max-width:1450px) {
+    .eligibility-img {
+        margin-right: -25rem;
+    }
+
+}
+
+/* =========== max-width:1366 ============= */
+
+@media(max-width:1366px) {
+    .eligibility-img {
+        margin-right: -20rem;
+    }
+
+
+}
+
+/* =========== max-width:1280 ============= */
+
+@media(max-width:1280px) {
+    .eligibility-img {
+        margin-right: -16rem;
+    }
+
+
+
+}
+
+/* =========== max-width:1170 ============= */
+@media(max-width:1170px) {
+
+
+}
+
+/* =========== max-width:1024 ============= */
+@media(max-width:1024px) {
+    .eligibility-img {
+        margin-right: -10rem;
+    }
+}
+
+/* =========== max-width:991 ============= */
+
+@media(max-width:991px) {
+    .eligibility-img {
+        margin-right: 0;
+    }
+}
+
+/* =========== max-width:728 ============= */
+@media(max-width:728px) {
+}

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="31" height="31" viewBox="0 0 31 31">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="path2919" d="M0-682.665H20v19H0Z" transform="translate(0 682.665)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Group_13094" data-name="Group 13094" transform="translate(-387.341 0.001)">
+    <circle id="Ellipse_53" data-name="Ellipse 53" cx="15.5" cy="15.5" r="15.5" transform="translate(387.341 -0.001)" fill="rgba(0,0,0,0)"/>
+    <g id="g2913" transform="translate(393.5 6)">
+      <g id="g2915">
+        <g id="g2917" clip-path="url(#clip-path)">
+          <g id="g2923" transform="translate(0.623 2.542)">
+            <path id="path2925" d="M-605.014-486.083h-16.517a1.124,1.124,0,0,1-1.134-1.113v-11.689A1.124,1.124,0,0,1-621.531-500h16.517a1.124,1.124,0,0,1,1.134,1.113V-487.2A1.124,1.124,0,0,1-605.014-486.083Z" transform="translate(622.665 499.999)" fill="none" stroke="#52658c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+          <g id="g2927" transform="translate(12.321 9.5)">
+            <path id="path2929" d="M-231.529-231.651l-6.755-6.632" transform="translate(238.283 238.283)" fill="none" stroke="#52658c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+          <g id="g2931" transform="translate(0.955 9.5)">
+            <path id="path2933" d="M-231.529,0l-6.755,6.632" transform="translate(238.283)" fill="none" stroke="#52658c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+          <g id="g2935" transform="translate(0.955 2.868)">
+            <path id="path2937" d="M0,0,3.328,3.267" fill="none" stroke="#52658c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+          <g id="g2939" transform="translate(5.084 2.868)">
+            <path id="path2941" d="M0-141.612l3.328,3.267a2.3,2.3,0,0,0,3.207,0l7.457-7.321" transform="translate(0 145.666)" fill="none" stroke="#52658c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,71 @@
+[
+    {
+        "header": "",
+        "items": [
+            {
+                "text": "Dashboard",
+                "icon": "bx bx-qr",
+                "available": true,
+                "link": "dashboard"
+            }
+        ]
+    },
+    {
+        "header": "CMS",
+        "items": [
+            {
+                "text": "Content Pages",
+                "icon": "bx bx-cog",
+                "available": true,
+                "link": "",
+                "submenu": [
+                    {
+                        "text": "Pages",
+                        "available": true,
+                        "link": "pages.index"
+                    },
+                    {
+                        "text": "Page Section",
+                        "available": true,
+                        "link": "page-sections.index"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "header": "ELEMENTS",
+        "items": [
+            {
+                "text": "Degree",
+                "icon": "bx bx-qr",
+                "available": true,
+                "link": "degree.index"
+            },
+            {
+                "text": "Gallery Images",
+                "icon": "bx bx-image",
+                "available": true,
+                "link": "images.index"
+            }
+        ]
+    },
+    {
+        "header": "Settings",
+        "items": [
+            {
+                "text": "Profile Settings",
+                "icon": "bx bx-cog",
+                "available": true,
+                "link": "",
+                "submenu": [
+                    {
+                        "text": "Update Profile",
+                        "available": true,
+                        "link": "profile.edit"
+                    }
+                ]
+            }
+        ]
+    }
+]

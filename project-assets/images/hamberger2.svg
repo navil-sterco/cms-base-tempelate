@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16.222" viewBox="0 0 21 16.222">
+  <g id="Hamberger" transform="translate(0.5 0.5)">
+    <line id="Line_1" data-name="Line 1" x2="20" fill="none" stroke="#ff0057" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <line id="Line_2" data-name="Line 2" x2="16.25" transform="translate(0 7.61)" fill="none" stroke="#ff0057" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <line id="Line_3" data-name="Line 3" x2="20" transform="translate(0 15.222)" fill="none" stroke="#ff0057" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  </g>
+</svg>
