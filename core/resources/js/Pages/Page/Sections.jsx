@@ -842,7 +842,7 @@ const SectionBuilder = () => {
                                                             </span>
                                                             <span className="badge bg-secondary flex-shrink-0">#{sIndex + 1}</span>
                                                             {hasMapping && (
-                                                                <span className="badge bg-warning text-dark flex-shrink-0">Repeatable</span>
+                                                                <span className="badge bg-secondary flex-shrink-0">Repeatable</span>
                                                             )}
                                                             {section.pivot_id && (
                                                                 <span className="badge bg-primary flex-shrink-0">Saved</span>
@@ -908,8 +908,8 @@ const SectionBuilder = () => {
                                                                         <h6 className="mb-1 d-flex align-items-center gap-2">
                                                                             <Boxes size={16} />
                                                                             Repeatable Items
-                                                                            <span className="badge bg-dark">
-                                                                                {section.mapping_items?.length || 0}
+                                                                            <span className="badge bg-secondary">
+                                                                                {section.mapping_items?.length || 0} Items
                                                                             </span>
                                                                         </h6>
                                                                         <p className="small text-muted mb-0">

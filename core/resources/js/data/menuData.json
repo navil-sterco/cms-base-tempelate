@@ -11,7 +11,7 @@
         ]
     },
     {
-        "header": "CMS",
+        "header": "CMS & Elements",
         "items": [
             {
                 "text": "Content Pages",
@@ -28,6 +28,29 @@
                         "text": "Page Section",
                         "available": true,
                         "link": "page-sections.index"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "header": "Modules Management",
+        "items": [
+            {
+                "text": "Manage Modules",
+                "icon": "bx bx-cog",
+                "available": true,
+                "link": "",
+                "submenu": [
+                    {
+                        "text": "Add Module",
+                        "available": true,
+                        "link": "modules.create"
+                    },
+                    {
+                        "text": "All Modules",
+                        "available": true,
+                        "link": "modules.index"
                     }
                 ]
             }

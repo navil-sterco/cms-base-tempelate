@@ -11,6 +11,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageSectionController;
 use App\Http\Controllers\SectionBuilderController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ModuleEntryController;
 use App\Http\Controllers\Frontend\FrontendController;
 
 Route::get('/', function () {
@@ -57,6 +59,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Page Sections Routes
     Route::resource('page-sections', PageSectionController::class);
     Route::put('/page-sections/{pageSection}/toggle-status', [PageSectionController::class, 'toggleStatus'])->name('page-sections.toggle-status');
+
+    // Modules
+    Route::resource('modules', ModuleController::class)->except(['destroy']);
+    Route::get('modules/{module}/destroy', [ModuleController::class, 'destroy'])->name('modules.destroy');
+    // Module Entries (Degree-style CRUD)
+    Route::get('modules/{module}/entries', [ModuleEntryController::class, 'index'])->name('modules.entries.index');
+    Route::get('modules/{module}/entries/create', [ModuleEntryController::class, 'create'])->name('modules.entries.create');
+    Route::post('modules/{module}/entries', [ModuleEntryController::class, 'store'])->name('modules.entries.store');
+    Route::get('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'show'])->name('modules.entries.show');
+    Route::get('modules/{module}/entries/{entry}/edit', [ModuleEntryController::class, 'edit'])->name('modules.entries.edit');
+    Route::put('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'update'])->name('modules.entries.update');
+    Route::delete('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'destroy'])->name('modules.entries.destroy');
 
     // Sections
     Route::get('/pages/{page}/sections', [SectionBuilderController::class, 'sections'])->name('pages.sections');
