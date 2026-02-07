@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Page;
+use App\Models\ModuleEntry;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,6 +21,9 @@ class FrontendController extends Controller
 
     public function modularPages($slug)
     {
+        $entries = ModuleEntry::getData(13);
+        return $entries;
+
         $page = Page::published()
             ->with(['degrees', 'sections' => function($query) {
                 $query->orderBy('order');

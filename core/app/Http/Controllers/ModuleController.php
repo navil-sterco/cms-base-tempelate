@@ -70,6 +70,7 @@ class ModuleController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:modules,slug',
+            'auto_generate_slug' => 'boolean',
             'fields_config' => 'nullable|array',
             'fields_config.*.name' => 'required|string',
             'fields_config.*.type' => 'required|string|in:text,textarea,number,email,url,select,checkbox,radio,file,date,image,code,color',
@@ -85,10 +86,14 @@ class ModuleController extends Controller
             'mapping_config.*.required' => 'boolean',
             'mapping_config.*.options' => 'nullable|array',
             'mapping_enabled' => 'boolean',
+            'types_enabled' => 'boolean',
+            'types' => 'nullable|array',
+            'types.*' => 'string|max:255',
             'is_active' => 'boolean',
         ]);
 
-        if (empty($validated['slug'])) {
+        // Auto-generate slug if enabled or if slug is empty
+        if (($validated['auto_generate_slug'] ?? true) || empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']);
         }
 
@@ -132,6 +137,7 @@ class ModuleController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:modules,slug,' . $module->id,
+            'auto_generate_slug' => 'boolean',
             'fields_config' => 'nullable|array',
             'fields_config.*.name' => 'required|string',
             'fields_config.*.type' => 'required|string|in:text,textarea,number,email,url,select,checkbox,radio,file,date,image,code,color',
@@ -145,8 +151,16 @@ class ModuleController extends Controller
             'mapping_config.*.required' => 'boolean',
             'mapping_config.*.options' => 'nullable|array',
             'mapping_enabled' => 'boolean',
+            'types_enabled' => 'boolean',
+            'types' => 'nullable|array',
+            'types.*' => 'string|max:255',
             'is_active' => 'boolean',
         ]);
+
+        // Auto-generate slug if enabled
+        if ($validated['auto_generate_slug'] ?? false) {
+            $validated['slug'] = Str::slug($validated['name']);
+        }
 
         $module->update($validated);
 

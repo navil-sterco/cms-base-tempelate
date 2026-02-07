@@ -6,8 +6,11 @@ const Create = ({ module }) => {
     const fields = useMemo(() => (Array.isArray(module?.fields_config) ? module.fields_config : []), [module]);
     const mappingEnabled = !!module?.mapping_enabled;
     const mappingFields = useMemo(() => (Array.isArray(module?.mapping_config) ? module.mapping_config : []), [module]);
+    const typesEnabled = !!module?.types_enabled;
+    const types = useMemo(() => (Array.isArray(module?.types) ? module.types : []), [module]);
 
     const { data, setData, post, processing, errors } = useForm({
+        type: '',
         data: buildEmptyData(fields),
         mapping_items: [],
         sort_order: 0,
@@ -41,6 +44,28 @@ const Create = ({ module }) => {
                 <form onSubmit={handleSubmit}>
                     <div className="card-body">
                         <div className="row g-3">
+                            {typesEnabled && types.length > 0 && (
+                                <div className="col-md-6">
+                                    <label className="form-label">
+                                        Type <span className="text-danger">*</span>
+                                    </label>
+                                    <select
+                                        className={`form-select ${errors?.type ? 'is-invalid' : ''}`}
+                                        value={data.type}
+                                        onChange={(e) => setData('type', e.target.value)}
+                                        required
+                                    >
+                                        <option value="">Select Type</option>
+                                        {types.map((type, idx) => (
+                                            <option key={idx} value={type}>
+                                                {type}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors?.type && <div className="text-danger small">{errors.type}</div>}
+                                </div>
+                            )}
+
                             {fields.map((field) => (
                                 <div key={field.name} className="col-md-6">
                                     <label className="form-label">

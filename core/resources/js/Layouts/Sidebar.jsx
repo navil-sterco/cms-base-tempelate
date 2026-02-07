@@ -10,23 +10,27 @@ const Sidebar = () => {
     const enhancedMenuData = menuData.map((section) => {
         if (section.header !== 'CMS & Elements') return section;
 
-        return {
-            ...section,
-            items: [
-                ...section.items,
-                {
-                    text: 'Elements',
-                    icon: 'bx bx-grid-alt',
-                    available: true,
-                    submenu: modulesForSidebar.map((m) => ({
-                        text: m.name,
+        if(modulesForSidebar.length > 0) {
+            return {
+                ...section,
+                items: [
+                    ...section.items,
+                    {
+                        text: 'Elements',
+                        icon: 'bx bx-grid-alt',
                         available: true,
-                        link: 'modules.entries.index',
-                        params: [m.id],
-                    })),
-                },
-            ],
-        };
+                        submenu: modulesForSidebar.map((m) => ({
+                            text: m.name,
+                            available: true,
+                            link: 'modules.entries.index',
+                            params: [m.id],
+                        })),
+                    },
+                ],
+            };
+        }
+
+        return section;
     });
 
     return (

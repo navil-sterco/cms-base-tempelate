@@ -53,6 +53,8 @@ class ModuleEntryController extends Controller
                 'fields_config' => $module->fields_config,
                 'mapping_enabled' => (bool) $module->mapping_enabled,
                 'mapping_config' => $module->mapping_config,
+                'types_enabled' => (bool) ($module->types_enabled ?? false),
+                'types' => $module->types ?? [],
             ],
             'entries' => $entries,
             'searchTerm' => $search ?? '',
@@ -69,6 +71,8 @@ class ModuleEntryController extends Controller
                 'fields_config' => $module->fields_config ?? [],
                 'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
                 'mapping_config' => $module->mapping_config ?? [],
+                'types_enabled' => (bool) ($module->types_enabled ?? false),
+                'types' => $module->types ?? [],
             ],
         ]);
     }
@@ -85,6 +89,8 @@ class ModuleEntryController extends Controller
                 'fields_config' => $module->fields_config ?? [],
                 'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
                 'mapping_config' => $module->mapping_config ?? [],
+                'types_enabled' => (bool) ($module->types_enabled ?? false),
+                'types' => $module->types ?? [],
             ],
             'entry' => [
                 'id' => $entry->id,
@@ -108,6 +114,8 @@ class ModuleEntryController extends Controller
                 'fields_config' => $module->fields_config ?? [],
                 'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
                 'mapping_config' => $module->mapping_config ?? [],
+                'types_enabled' => (bool) ($module->types_enabled ?? false),
+                'types' => $module->types ?? [],
             ],
             'entry' => [
                 'id' => $entry->id,
@@ -123,7 +131,9 @@ class ModuleEntryController extends Controller
         $rules = $this->buildRulesFromConfig(
             $module->fields_config ?? [],
             (bool) ($module->mapping_enabled ?? false),
-            $module->mapping_config ?? []
+            $module->mapping_config ?? [],
+            (bool) ($module->types_enabled ?? false),
+            $module->types ?? []
         );
 
         $validated = $request->validate($rules);
@@ -131,6 +141,9 @@ class ModuleEntryController extends Controller
         $data = $validated['data'] ?? [];
         if ((bool) ($module->mapping_enabled ?? false)) {
             $data['mapping_items'] = $validated['mapping_items'] ?? [];
+        }
+        if ((bool) ($module->types_enabled ?? false) && isset($validated['type'])) {
+            $data['type'] = $validated['type'];
         }
 
         $module->entries()->create([
@@ -151,13 +164,18 @@ class ModuleEntryController extends Controller
         $rules = $this->buildRulesFromConfig(
             $module->fields_config ?? [],
             (bool) ($module->mapping_enabled ?? false),
-            $module->mapping_config ?? []
+            $module->mapping_config ?? [],
+            (bool) ($module->types_enabled ?? false),
+            $module->types ?? []
         );
         $validated = $request->validate($rules);
 
         $data = $validated['data'] ?? [];
         if ((bool) ($module->mapping_enabled ?? false)) {
             $data['mapping_items'] = $validated['mapping_items'] ?? [];
+        }
+        if ((bool) ($module->types_enabled ?? false) && isset($validated['type'])) {
+            $data['type'] = $validated['type'];
         }
 
         $entry->update([
@@ -182,11 +200,16 @@ class ModuleEntryController extends Controller
             ->with('success', 'Entry deleted successfully!');
     }
 
-    private function buildRulesFromConfig(array $fieldsConfig, bool $mappingEnabled, array $mappingConfig): array
+    private function buildRulesFromConfig(array $fieldsConfig, bool $mappingEnabled, array $mappingConfig, bool $typesEnabled = false, array $types = []): array
     {
         $rules = [
             'data' => 'required|array',
         ];
+
+        // Add type validation if types are enabled
+        if ($typesEnabled && count($types) > 0) {
+            $rules['type'] = 'required|string|in:' . implode(',', $types);
+        }
 
         foreach ($fieldsConfig as $field) {
             $name = $field['name'] ?? null;

@@ -24,5 +24,15 @@ class ModuleEntry extends Model
     {
         return $this->belongsTo(Module::class);
     }
+
+    public static function getData(int $id)
+    {
+        return self::whereHas('module', fn ($q) =>
+                $q->where('id', $id)
+            )
+            ->where('is_active', 1)
+            ->orderBy('sort_order')
+            ->pluck('data');
+    }
 }
 

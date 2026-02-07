@@ -23,9 +23,12 @@ const Edit = ({ module }) => {
     const { data, setData, put, errors, processing } = useForm({
         name: module?.name || '',
         slug: module?.slug || '',
+        auto_generate_slug: module?.auto_generate_slug ?? true,
         fields_config: getConfigValue(module?.fields_config),
         mapping_config: getConfigValue(module?.mapping_config),
         mapping_enabled: module?.mapping_enabled || false,
+        types_enabled: module?.types_enabled || false,
+        types: module?.types || [],
         is_active: module?.is_active ?? true,
     });
 
@@ -77,6 +80,20 @@ const Edit = ({ module }) => {
         { value: 'date', label: 'Date' },
         { value: 'color', label: 'Color Picker' },
     ];
+
+    useEffect(() => {
+        if (data.auto_generate_slug && data.name) {
+            const generatedSlug = data.name
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            setData('slug', generatedSlug);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.name, data.auto_generate_slug]);
 
     useEffect(() => {
         try {
@@ -350,19 +367,116 @@ const Edit = ({ module }) => {
                                 required={true}
                                 icon={<Tag size={16} />}
                                 helperText="URL-friendly key used internally."
+                                disabled={data.auto_generate_slug}
                             />
                         </div>
                     </div>
 
-                    <div className="form-check form-switch">
-                        <input
-                            type="checkbox"
-                            className="form-check-input"
-                            checked={data.is_active}
-                            onChange={(e) => setData('is_active', e.target.checked)}
-                            role="switch"
-                        />
-                        <label className="form-check-label fw-medium">Active Module</label>
+                    <div className="row mb-3">
+                        <div className="col-md-6">
+                            <div className="form-check form-switch">
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    checked={data.auto_generate_slug}
+                                    onChange={(e) => setData('auto_generate_slug', e.target.checked)}
+                                    role="switch"
+                                />
+                                <label className="form-check-label fw-medium">Auto-generate slug from name</label>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-check form-switch">
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    checked={data.is_active}
+                                    onChange={(e) => setData('is_active', e.target.checked)}
+                                    role="switch"
+                                />
+                                <label className="form-check-label fw-medium">Active Module</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Types Configuration */}
+                    <div className="border-top pt-3 mt-3">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h6 className="mb-0">Module Types</h6>
+                            <div className="form-check form-switch">
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    checked={data.types_enabled}
+                                    onChange={(e) => {
+                                        setData('types_enabled', e.target.checked);
+                                        if (!e.target.checked) {
+                                            setData('types', []);
+                                        }
+                                    }}
+                                    role="switch"
+                                />
+                                <label className="form-check-label fw-medium">Enable Types</label>
+                            </div>
+                        </div>
+
+                        {data.types_enabled && (
+                            <div className="border rounded p-3 bg-light">
+                                <div className="d-flex gap-2 mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Add type (e.g., Student, Parent, Teacher)"
+                                        onKeyPress={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                const value = e.target.value.trim();
+                                                if (value && !(data.types || []).includes(value)) {
+                                                    setData('types', [...(data.types || []), value]);
+                                                    e.target.value = '';
+                                                }
+                                            }
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            const input = e.target.previousElementSibling;
+                                            const value = input.value.trim();
+                                            if (value && !(data.types || []).includes(value)) {
+                                                setData('types', [...(data.types || []), value]);
+                                                input.value = '';
+                                            }
+                                        }}
+                                    >
+                                        <i className="bx bx-plus me-1"></i>
+                                        Add
+                                    </button>
+                                </div>
+
+                                {(data.types || []).length > 0 ? (
+                                    <div className="d-flex flex-wrap gap-2">
+                                        {(data.types || []).map((type, idx) => (
+                                            <span key={idx} className="badge bg-primary d-flex align-items-center gap-2">
+                                                {type}
+                                                <button
+                                                    type="button"
+                                                    className="btn-close btn-close-white"
+                                                    style={{ fontSize: '0.7rem' }}
+                                                    onClick={() => {
+                                                        setData('types', (data.types || []).filter((_, i) => i !== idx));
+                                                    }}
+                                                ></button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-muted small">No types added yet. Add types like Student, Parent, Teacher, etc.</div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
