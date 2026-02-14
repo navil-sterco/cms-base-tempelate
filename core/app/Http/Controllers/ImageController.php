@@ -12,19 +12,15 @@ class ImageController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $image = Image::filter(['search' => $search])
-            ->orderBy('id', 'desc')
-            ->paginate($request->get('per_page', 12))
-            ->withQueryString()
-            ->through(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'created_at' => $item->created_at,
-                    'type' => $item->type,
-                    'images' => $item->file_path ? asset($item->file_path) : asset('assets/img/placeholder.png')
-                ];
-            });
+        $image = Image::filter(['search' => $search])->orderBy('id', 'desc')->paginate(12)->withQueryString()->through(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'created_at' => $item->created_at,
+                'type' => $item->type,
+                'images' => $item->file_path ? asset($item->file_path) : asset('assets/img/placeholder.png')
+            ];
+        });
 
         // Return Inertia response for regular page visits
         return Inertia::render('Images/Index', [

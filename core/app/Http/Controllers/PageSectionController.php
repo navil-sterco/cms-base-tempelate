@@ -148,6 +148,8 @@ class PageSectionController extends Controller
             'fields_config.*.type' => 'required|string|in:text,textarea,number,email,url,select,checkbox,radio,file,date,image,code,color',
             'fields_config.*.label' => 'required|string',
             'fields_config.*.required' => 'boolean',
+            'fields_config.*.placeholder' => 'required|string',
+            'fields_config.*.default' => 'required|string',
             'fields_config.*.options' => 'nullable|array',
             'mapping_config' => 'nullable|array',
             'mapping_config.*.name' => 'required|string',

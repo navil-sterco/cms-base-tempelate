@@ -13,7 +13,25 @@ const Show = ({ module, entry }) => {
         [module]
     );
 
-    const mappingItems = entry?.data?.mapping_items || [];
+    const mappingItems = useMemo(() => {
+        const data = entry?.data || {};
+        const oldItems = data.mapping_items;
+        if (Array.isArray(oldItems) && oldItems.length > 0) return oldItems;
+        const fieldArrays = {};
+        (mappingFields || []).forEach((mf) => {
+            const name = mf?.name;
+            if (name && Array.isArray(data[name])) fieldArrays[name] = data[name];
+        });
+        if (Object.keys(fieldArrays).length === 0) return [];
+        const maxLen = Math.max(...Object.values(fieldArrays).map((a) => a.length), 0);
+        const items = [];
+        for (let i = 0; i < maxLen; i++) {
+            const item = {};
+            Object.keys(fieldArrays).forEach((k) => (item[k] = fieldArrays[k][i] ?? ''));
+            items.push(item);
+        }
+        return items;
+    }, [entry?.data, mappingFields]);
 
     return (
         <div className="container-fluid py-4">

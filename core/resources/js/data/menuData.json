@@ -43,11 +43,6 @@
                 "link": "",
                 "submenu": [
                     {
-                        "text": "Add Module",
-                        "available": true,
-                        "link": "modules.create"
-                    },
-                    {
                         "text": "All Modules",
                         "available": true,
                         "link": "modules.index"

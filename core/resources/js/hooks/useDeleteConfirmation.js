@@ -4,7 +4,7 @@ import { useModal } from './useModal';
 
 export const useDeleteConfirmation = (deleteRouteName) => {
     const [itemToDelete, setItemToDelete] = useState(null);
-    const { get, processing } = useForm();
+    const { get: destroy, processing } = useForm();
     const { modalRef, show, hide } = useModal();
 
     const confirmDelete = (id, additionalData = {}) => {
@@ -12,17 +12,13 @@ export const useDeleteConfirmation = (deleteRouteName) => {
         show();
     };
 
-    const handleDelete = (onSuccessCallback, onErrorCallback) => {
+    const handleDelete = () => {
         if (!itemToDelete?.id) return;
 
-        get(route(deleteRouteName, itemToDelete.id), {
+        destroy(route(deleteRouteName, itemToDelete.id), {
             onSuccess: () => {
                 hide();
                 setItemToDelete(null);
-                if (onSuccessCallback) onSuccessCallback();
-            },
-            onError: (errors) => {
-                if (onErrorCallback) onErrorCallback(errors);
             }
         });
     };

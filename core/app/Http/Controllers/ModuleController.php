@@ -40,7 +40,10 @@ class ModuleController extends Controller
 
     public function create()
     {
-        return Inertia::render('Module/Create');
+        $modules = Module::active()->orderBy('name')->get(['id', 'name', 'slug']);
+        return Inertia::render('Module/Create', [
+            'modules' => $modules,
+        ]);
     }
 
     public function store(Request $request)
@@ -75,8 +78,9 @@ class ModuleController extends Controller
             'fields_config.*.name' => 'required|string',
             'fields_config.*.type' => 'required|string|in:text,textarea,number,email,url,select,checkbox,radio,file,date,image,code,color',
             'fields_config.*.label' => 'required|string',
-            'fields_config.*.placeholder' => 'required|string',
-            'fields_config.*.default' => 'required|string',
+            'fields_config.*.placeholder' => 'nullable|string',
+            'fields_config.*.is_slug' => 'nullable|boolean',
+            'fields_config.*.default' => 'nullable|string',
             'fields_config.*.required' => 'boolean',
             'fields_config.*.options' => 'nullable|array',
             'mapping_config' => 'nullable|array',
@@ -85,6 +89,8 @@ class ModuleController extends Controller
             'mapping_config.*.label' => 'required|string',
             'mapping_config.*.required' => 'boolean',
             'mapping_config.*.options' => 'nullable|array',
+            'map_to_module_ids' => 'nullable|array',
+            'map_to_module_ids.*' => 'integer|exists:modules,id',
             'mapping_enabled' => 'boolean',
             'types_enabled' => 'boolean',
             'types' => 'nullable|array',
@@ -92,7 +98,6 @@ class ModuleController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Auto-generate slug if enabled or if slug is empty
         if (($validated['auto_generate_slug'] ?? true) || empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']);
         }
@@ -105,8 +110,10 @@ class ModuleController extends Controller
 
     public function edit(Module $module)
     {
+        $modules = Module::active()->where('id', '!=', $module->id)->orderBy('name')->get(['id', 'name', 'slug']);
         return Inertia::render('Module/Edit', [
             'module' => $module,
+            'modules' => $modules,
         ]);
     }
 
@@ -143,13 +150,18 @@ class ModuleController extends Controller
             'fields_config.*.type' => 'required|string|in:text,textarea,number,email,url,select,checkbox,radio,file,date,image,code,color',
             'fields_config.*.label' => 'required|string',
             'fields_config.*.required' => 'boolean',
+            'fields_config.*.placeholder' => 'nullable|string',
+            'fields_config.*.default' => 'nullable|string',
             'fields_config.*.options' => 'nullable|array',
+            'fields_config.*.is_slug' => 'nullable|boolean',
             'mapping_config' => 'nullable|array',
             'mapping_config.*.name' => 'required|string',
             'mapping_config.*.type' => 'required|string|in:text,textarea,number,email,url,select,checkbox,radio,file,date,image,code,color',
             'mapping_config.*.label' => 'required|string',
             'mapping_config.*.required' => 'boolean',
             'mapping_config.*.options' => 'nullable|array',
+            'map_to_module_ids' => 'nullable|array',
+            'map_to_module_ids.*' => 'integer|exists:modules,id',
             'mapping_enabled' => 'boolean',
             'types_enabled' => 'boolean',
             'types' => 'nullable|array',
@@ -157,7 +169,6 @@ class ModuleController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Auto-generate slug if enabled
         if ($validated['auto_generate_slug'] ?? false) {
             $validated['slug'] = Str::slug($validated['name']);
         }

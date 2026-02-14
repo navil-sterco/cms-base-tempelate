@@ -15,7 +15,12 @@ const Index = ({ module, entries, searchTerm }) => {
     useFlashMessage();
 
     const fields = useMemo(() => (Array.isArray(module?.fields_config) ? module.fields_config : []), [module]);
-    const listFields = useMemo(() => fields.slice(0, 7), [fields]);
+    const listFields = useMemo(() => {
+        // Filter out image, file, textarea, and code fields
+        return fields
+            .filter(f => !['image', 'file', 'textarea', 'code'].includes(f.type))
+            .slice(0, 7);
+    }, [fields]);
 
     const { modalRef, show, hide } = useModal();
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -75,6 +80,11 @@ const Index = ({ module, entries, searchTerm }) => {
                                 entries.data.map((entry) => {
                                     const actions = [
                                         {
+                                            label: 'Mapping',
+                                            icon: 'bx-right-arrow-circle',
+                                            href: route('modules.entries.mapping', { module: module.id, entry: entry.id }),
+                                        },
+                                        {
                                             label: 'Show',
                                             icon: 'bx-show',
                                             href: route('modules.entries.show', { module: module.id, entry: entry.id }),
@@ -94,14 +104,30 @@ const Index = ({ module, entries, searchTerm }) => {
 
                                     return (
                                         <tr key={entry.id}>
-                                            <td>{entry.id}</td>
+                                            <td>
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <div className="bg-primary bg-opacity-10 rounded p-2">
+                                                        <i className="bx bx-cube text-white fs-5"></i>
+                                                    </div>
+                                                    <span>{entry.id}</span>
+                                                </div>
+                                            </td>
                                             {listFields.map((f) => (
                                                 <td key={f.name}>
                                                     {String(entry.data?.[f.name] ?? '')}
                                                 </td>
                                             ))}
                                             <td>
-                                                <ActionDropdown actions={actions} />
+                                                <div className="d-flex align-items-center gap-1">
+                                                    <Link
+                                                        className="btn btn-sm btn-outline-primary p-1"
+                                                        href={route('modules.entries.mapping', { module: module.id, entry: entry.id })}
+                                                    >
+                                                        <i className="bx bx-right-arrow-circle me-1"></i>
+                                                        Mapping
+                                                    </Link>
+                                                    <ActionDropdown actions={actions} />
+                                                </div>
                                             </td>
                                         </tr>
                                     );

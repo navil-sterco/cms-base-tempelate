@@ -69,17 +69,45 @@ const MenuItem = ({ item }) => {
     const { url } = usePage();
     const hasSubmenu = Array.isArray(item.submenu) && item.submenu.length > 0;
 
-    // 🔥 ACTIVE LOGIC (THIS FIXES IT)
-    const isActive = item.link
-        ? route().current(item.link, item.params ?? [])
-        : false;
+    // Helper function to check if URL matches a menu path
+    const isUrlMatch = (link, params = []) => {
+        if (!link) return false;
+        
+        const linkBase = link.split('.')[0];
+        
+        // Handle module entries (e.g., modules.entries.index)
+        if (link === 'modules.entries.index' && params[0]) {
+            const moduleId = params[0];
+            return url.includes(`/modules/${moduleId}/entries`);
+        }
+        
+        // Handle by link base
+        switch (linkBase) {
+            case 'degree':
+                return url.includes('/degree');
+            case 'pages':
+                return url.includes('/pages');
+            case 'page-sections':
+                return url.includes('/page-sections');
+            case 'modules':
+                // Only match /modules (not /modules/{id}/entries)
+                return url.includes('/modules') && !url.includes('/entries');
+            case 'images':
+                return url.includes('/images');
+            case 'profile':
+                return url.includes('/profile');
+            default:
+                // Fallback to exact route match
+                return route().current(link, params);
+        }
+    };
 
+    // Check if this menu item itself is active
+    const isActive = isUrlMatch(item.link, item.params);
+
+    // Check if any submenu item is active
     const isSubmenuActive = hasSubmenu
-        ? item.submenu.some((sub) =>
-              sub.link
-                  ? route().current(sub.link, sub.params ?? [])
-                  : false
-          )
+        ? item.submenu.some((sub) => isUrlMatch(sub.link, sub.params))
         : false;
 
     const href = item.link

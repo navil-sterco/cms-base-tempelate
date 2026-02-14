@@ -1,7 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import { Link, router, useForm } from '@inertiajs/react';
+import { renderFieldInput } from '@/Pages/ModuleEntry/entryFormHelpers';
 
-const Entries = ({ module, entries, searchTerm }) => {
+const migrateToMappingData = (entryData, mappingFields) => {
+    const oldItems = entryData?.mapping_items;
+    if (Array.isArray(oldItems) && oldItems.length > 0) {
+        const result = {};
+        (mappingFields || []).forEach((mf) => {
+            const name = mf?.name;
+            if (name) result[name] = oldItems.map((item) => item[name] ?? '');
+        });
+        return result;
+    }
+    const result = {};
+    (mappingFields || []).forEach((mf) => {
+        const name = mf?.name;
+        if (name) result[name] = Array.isArray(entryData?.[name]) ? [...entryData[name]] : [];
+    });
+    return result;
+};
+
+const Entries = ({ module, entries, searchTerm, mappedModuleEntries = {} }) => {
     const fields = useMemo(() => (Array.isArray(module?.fields_config) ? module.fields_config : []), [module]);
     const mappingFields = useMemo(() => (Array.isArray(module?.mapping_config) ? module.mapping_config : []), [module]);
     const mappingEnabled = !!module?.mapping_enabled;
@@ -14,27 +33,40 @@ const Entries = ({ module, entries, searchTerm }) => {
         return obj;
     }, [fields]);
 
+    const emptyMappingData = useMemo(() => {
+        const obj = {};
+        mappingFields.forEach((f) => {
+            if (f?.name) obj[f.name] = [];
+        });
+        return obj;
+    }, [mappingFields]);
+
     const { data, setData, post, processing, errors, reset } = useForm({
         data: emptyData,
-        mapping_items: [],
+        mapping_data: emptyMappingData,
         sort_order: 0,
         is_active: true,
     });
 
     const [editingId, setEditingId] = useState(null);
     const [editingData, setEditingData] = useState({});
-    const [editingMappingItems, setEditingMappingItems] = useState([]);
+    const [editingMappingData, setEditingMappingData] = useState({});
 
     const startEdit = (entry) => {
         setEditingId(entry.id);
-        setEditingData({ ...(entry.data || {}) });
-        setEditingMappingItems([...(entry.data?.mapping_items || [])]);
+        const entryData = entry.data || {};
+        const mappingFieldNames = new Set((mappingFields || []).map((f) => f.name).filter(Boolean));
+        const regular = { ...entryData };
+        delete regular.mapping_items;
+        mappingFieldNames.forEach((n) => delete regular[n]);
+        setEditingData(regular);
+        setEditingMappingData(migrateToMappingData(entryData, mappingFields));
     };
 
     const stopEdit = () => {
         setEditingId(null);
         setEditingData({});
-        setEditingMappingItems([]);
+        setEditingMappingData({});
     };
 
     const submitNew = (e) => {
@@ -51,7 +83,7 @@ const Entries = ({ module, entries, searchTerm }) => {
         e.preventDefault();
         router.put(route('modules.entries.update', { module: module.id, entry: editingId }), {
             data: editingData,
-            mapping_items: editingMappingItems,
+            mapping_data: editingMappingData,
         }, { preserveScroll: true, onSuccess: stopEdit });
     };
 
@@ -59,106 +91,42 @@ const Entries = ({ module, entries, searchTerm }) => {
         router.delete(route('modules.entries.destroy', { module: module.id, entry: entryId }), { preserveScroll: true });
     };
 
-    const renderInput = (field, value, onChange) => {
-        const required = !!field.required;
-        const placeholder = field.placeholder || '';
-
-        if (field.type === 'textarea') {
-            return (
-                <textarea
-                    className="form-control"
-                    rows={3}
-                    value={value ?? ''}
-                    onChange={(e) => onChange(e.target.value)}
-                    placeholder={placeholder}
-                    required={required}
-                />
-            );
-        }
-
-        if (field.type === 'select') {
-            const options = Array.isArray(field.options) ? field.options : [];
-            return (
-                <select
-                    className="form-select"
-                    value={value ?? ''}
-                    onChange={(e) => onChange(e.target.value)}
-                    required={required}
-                >
-                    <option value="">Select</option>
-                    {options.map((opt, idx) => (
-                        <option key={idx} value={opt.value || opt}>
-                            {opt.label || opt}
-                        </option>
-                    ))}
-                </select>
-            );
-        }
-
-        if (field.type === 'checkbox') {
-            return (
-                <div className="form-check">
-                    <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={!!value}
-                        onChange={(e) => onChange(e.target.checked)}
-                    />
-                </div>
-            );
-        }
-
-        const htmlType = field.type === 'number' ? 'number' : (field.type === 'date' ? 'date' : 'text');
-        return (
-            <input
-                type={htmlType}
-                className="form-control"
-                value={value ?? ''}
-                onChange={(e) => onChange(e.target.value)}
-                placeholder={placeholder}
-                required={required}
-            />
-        );
-    };
-
-    const renderMappingInput = (field, value, onChange) => {
-        return renderInput(field, value, onChange);
-    };
-
-    const addMappingItem = () => {
-        const item = {};
-        mappingFields.forEach((f) => {
-            if (f?.name) item[f.name] = f?.type === 'checkbox' ? false : '';
+    const addMappingItem = (fieldName) => {
+        setData('mapping_data', {
+            ...(data.mapping_data || {}),
+            [fieldName]: [...(data.mapping_data?.[fieldName] || []), ''],
         });
-        setData('mapping_items', [...(data.mapping_items || []), item]);
     };
 
-    const removeMappingItem = (index) => {
-        setData('mapping_items', (data.mapping_items || []).filter((_, i) => i !== index));
+    const removeMappingItem = (fieldName, index) => {
+        const arr = [...(data.mapping_data?.[fieldName] || [])];
+        arr.splice(index, 1);
+        setData('mapping_data', { ...(data.mapping_data || {}), [fieldName]: arr });
     };
 
-    const updateMappingItem = (index, fieldName, value) => {
-        const items = [...(data.mapping_items || [])];
-        items[index] = { ...(items[index] || {}), [fieldName]: value };
-        setData('mapping_items', items);
+    const updateMappingItem = (fieldName, index, value) => {
+        const arr = [...(data.mapping_data?.[fieldName] || [])];
+        arr[index] = value;
+        setData('mapping_data', { ...(data.mapping_data || {}), [fieldName]: arr });
     };
 
-    const addEditingMappingItem = () => {
-        const item = {};
-        mappingFields.forEach((f) => {
-            if (f?.name) item[f.name] = f?.type === 'checkbox' ? false : '';
+    const addEditingMappingItem = (fieldName) => {
+        setEditingMappingData({
+            ...editingMappingData,
+            [fieldName]: [...(editingMappingData[fieldName] || []), ''],
         });
-        setEditingMappingItems([...(editingMappingItems || []), item]);
     };
 
-    const removeEditingMappingItem = (index) => {
-        setEditingMappingItems((editingMappingItems || []).filter((_, i) => i !== index));
+    const removeEditingMappingItem = (fieldName, index) => {
+        const arr = [...(editingMappingData[fieldName] || [])];
+        arr.splice(index, 1);
+        setEditingMappingData({ ...editingMappingData, [fieldName]: arr });
     };
 
-    const updateEditingMappingItem = (index, fieldName, value) => {
-        const items = [...(editingMappingItems || [])];
-        items[index] = { ...(items[index] || {}), [fieldName]: value };
-        setEditingMappingItems(items);
+    const updateEditingMappingItem = (fieldName, index, value) => {
+        const arr = [...(editingMappingData[fieldName] || [])];
+        arr[index] = value;
+        setEditingMappingData({ ...editingMappingData, [fieldName]: arr });
     };
 
     return (
@@ -200,7 +168,7 @@ const Entries = ({ module, entries, searchTerm }) => {
                                             {field.label || field.name}
                                             {field.required && <span className="text-danger"> *</span>}
                                         </label>
-                                        {renderInput(field, data.data[field.name], (v) => setData('data', { ...data.data, [field.name]: v }))}
+                                        {renderFieldInput(field, data.data[field.name], (v) => setData('data', { ...data.data, [field.name]: v }), { moduleEntries: mappedModuleEntries })}
                                         {errors?.[`data.${field.name}`] && (
                                             <div className="text-danger small">{errors[`data.${field.name}`]}</div>
                                         )}
@@ -209,45 +177,35 @@ const Entries = ({ module, entries, searchTerm }) => {
 
                                 {mappingEnabled && mappingFields.length > 0 && (
                                     <div className="col-12">
-                                        <div className="border rounded p-3">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <h6 className="mb-0">Repeatable Items</h6>
-                                                <button type="button" className="btn btn-sm btn-outline-primary" onClick={addMappingItem}>
-                                                    <i className="bx bx-plus me-1"></i>
-                                                    Add Item
-                                                </button>
-                                            </div>
-
-                                            {(data.mapping_items || []).length === 0 ? (
-                                                <div className="text-muted small">No items yet.</div>
-                                            ) : (
-                                                <div className="d-flex flex-column gap-3">
-                                                    {(data.mapping_items || []).map((item, idx) => (
-                                                        <div key={idx} className="border rounded p-3 bg-light">
-                                                            <div className="d-flex justify-content-between align-items-center mb-2">
-                                                                <strong>Item #{idx + 1}</strong>
-                                                                <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeMappingItem(idx)}>
-                                                                    <i className="bx bx-trash"></i>
-                                                                </button>
-                                                            </div>
-                                                            <div className="row g-3">
-                                                                {mappingFields.map((mf) => (
-                                                                    <div key={mf.name} className="col-md-6">
-                                                                        <label className="form-label">
-                                                                            {mf.label || mf.name}
-                                                                            {mf.required && <span className="text-danger"> *</span>}
-                                                                        </label>
-                                                                        {renderMappingInput(mf, item[mf.name], (v) => updateMappingItem(idx, mf.name, v))}
-                                                                        {errors?.[`mapping_items.${idx}.${mf.name}`] && (
-                                                                            <div className="text-danger small">{errors[`mapping_items.${idx}.${mf.name}`]}</div>
-                                                                        )}
+                                        <h6 className="mb-3">Repeatable Items (each field has its own array)</h6>
+                                        <div className="d-flex flex-column gap-4">
+                                            {mappingFields.map((mf) => (
+                                                <div key={mf.name} className="border rounded p-3">
+                                                    <div className="d-flex justify-content-between align-items-center mb-3">
+                                                        <strong>{mf.label || mf.name}</strong>
+                                                        <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => addMappingItem(mf.name)}>
+                                                            <i className="bx bx-plus me-1"></i>
+                                                            Add Item
+                                                        </button>
+                                                    </div>
+                                                    {(data.mapping_data?.[mf.name] || []).length === 0 ? (
+                                                        <div className="text-muted small">No items yet.</div>
+                                                    ) : (
+                                                        <div className="d-flex flex-column gap-2">
+                                                            {(data.mapping_data?.[mf.name] || []).map((val, idx) => (
+                                                                <div key={idx} className="d-flex align-items-center gap-2">
+                                                                    <div className="flex-grow-1">
+                                                                        {renderFieldInput(mf, val, (v) => updateMappingItem(mf.name, idx, v), { moduleEntries: mappedModuleEntries })}
                                                                     </div>
-                                                                ))}
-                                                            </div>
+                                                                    <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeMappingItem(mf.name, idx)}>
+                                                                        <i className="bx bx-trash"></i>
+                                                                    </button>
+                                                                </div>
+                                                            ))}
                                                         </div>
-                                                    ))}
+                                                    )}
                                                 </div>
-                                            )}
+                                            ))}
                                         </div>
                                     </div>
                                 )}
@@ -313,7 +271,7 @@ const Entries = ({ module, entries, searchTerm }) => {
                                             {fields.map((f) => (
                                                 <td key={f.name}>
                                                     {editingId === entry.id ? (
-                                                        renderInput(f, editingData[f.name], (v) => setEditingData({ ...editingData, [f.name]: v }))
+                                                        renderFieldInput(f, editingData[f.name], (v) => setEditingData({ ...editingData, [f.name]: v }), { moduleEntries: mappedModuleEntries })
                                                     ) : (
                                                         <span>{String(entry.data?.[f.name] ?? '')}</span>
                                                     )}
@@ -330,13 +288,22 @@ const Entries = ({ module, entries, searchTerm }) => {
                                                         </button>
                                                     </div>
                                                 ) : (
-                                                    <div className="btn-group btn-group-sm">
-                                                        <button type="button" className="btn btn-outline-primary" onClick={() => startEdit(entry)}>
-                                                            <i className="bx bx-edit"></i>
-                                                        </button>
-                                                        <button type="button" className="btn btn-outline-danger" onClick={() => deleteEntry(entry.id)}>
-                                                            <i className="bx bx-trash"></i>
-                                                        </button>
+                                                    <div className="d-flex align-items-center gap-1">
+                                                        <Link
+                                                            className="btn btn-sm btn-outline-primary p-1"
+                                                            href={route('modules.entries.mapping', { module: module.id, entry: entry.id })}
+                                                        >
+                                                            <i className="bx bx-right-arrow-circle me-1"></i>
+                                                            Mapping
+                                                        </Link>
+                                                        <div className="btn-group btn-group-sm">
+                                                            <button type="button" className="btn btn-outline-primary" onClick={() => startEdit(entry)}>
+                                                                <i className="bx bx-edit"></i>
+                                                            </button>
+                                                            <button type="button" className="btn btn-outline-danger" onClick={() => deleteEntry(entry.id)}>
+                                                                <i className="bx bx-trash"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </td>
@@ -347,44 +314,36 @@ const Entries = ({ module, entries, searchTerm }) => {
 
                             {mappingEnabled && mappingFields.length > 0 && editingId && (
                                 <div className="mt-4 border-top pt-3">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h6 className="mb-0">Edit Repeatable Items (Entry #{editingId})</h6>
-                                        <button type="button" className="btn btn-sm btn-outline-primary" onClick={addEditingMappingItem}>
-                                            <i className="bx bx-plus me-1"></i>
-                                            Add Item
-                                        </button>
-                                    </div>
-
-                                    {(editingMappingItems || []).length === 0 ? (
-                                        <div className="text-muted small">No items yet.</div>
-                                    ) : (
-                                        <div className="d-flex flex-column gap-3">
-                                            {(editingMappingItems || []).map((item, idx) => (
-                                                <div key={idx} className="border rounded p-3 bg-light">
-                                                    <div className="d-flex justify-content-between align-items-center mb-2">
-                                                        <strong>Item #{idx + 1}</strong>
-                                                        <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeEditingMappingItem(idx)}>
-                                                            <i className="bx bx-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                    <div className="row g-3">
-                                                        {mappingFields.map((mf) => (
-                                                            <div key={mf.name} className="col-md-6">
-                                                                <label className="form-label">
-                                                                    {mf.label || mf.name}
-                                                                    {mf.required && <span className="text-danger"> *</span>}
-                                                                </label>
-                                                                {renderMappingInput(mf, item[mf.name], (v) => updateEditingMappingItem(idx, mf.name, v))}
-                                                                {errors?.[`mapping_items.${idx}.${mf.name}`] && (
-                                                                    <div className="text-danger small">{errors[`mapping_items.${idx}.${mf.name}`]}</div>
-                                                                )}
+                                    <h6 className="mb-3">Edit Repeatable Items (Entry #{editingId})</h6>
+                                    <div className="d-flex flex-column gap-4">
+                                        {mappingFields.map((mf) => (
+                                            <div key={mf.name} className="border rounded p-3">
+                                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                                    <strong>{mf.label || mf.name}</strong>
+                                                    <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => addEditingMappingItem(mf.name)}>
+                                                        <i className="bx bx-plus me-1"></i>
+                                                        Add Item
+                                                    </button>
+                                                </div>
+                                                {(editingMappingData[mf.name] || []).length === 0 ? (
+                                                    <div className="text-muted small">No items yet.</div>
+                                                ) : (
+                                                    <div className="d-flex flex-column gap-2">
+                                                        {(editingMappingData[mf.name] || []).map((val, idx) => (
+                                                            <div key={idx} className="d-flex align-items-center gap-2">
+                                                                <div className="flex-grow-1">
+                                                                    {renderFieldInput(mf, val, (v) => updateEditingMappingItem(mf.name, idx, v), { moduleEntries: mappedModuleEntries })}
+                                                                </div>
+                                                                <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeEditingMappingItem(mf.name, idx)}>
+                                                                    <i className="bx bx-trash"></i>
+                                                                </button>
                                                             </div>
                                                         ))}
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -396,4 +355,3 @@ const Entries = ({ module, entries, searchTerm }) => {
 };
 
 export default Entries;
-

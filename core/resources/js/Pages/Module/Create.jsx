@@ -4,7 +4,7 @@ import JsonEditor from '@/Components/Fields/JsonEditor';
 import TextInput from '@/Components/Form/TextInput';
 import { Type, Tag } from 'lucide-react';
 
-const Create = () => {
+const Create = ({ modules = [] }) => {
     const { data, setData, post, errors, processing } = useForm({
         name: '',
         slug: '',
@@ -12,6 +12,7 @@ const Create = () => {
         fields_config: '[]',
         mapping_config: '[]',
         mapping_enabled: false,
+        map_to_module_ids: [],
         types_enabled: false,
         types: [],
         is_active: true,
@@ -29,6 +30,7 @@ const Create = () => {
         placeholder: '',
         options: '',
         default: '',
+        is_slug: false,
     });
     const [newMappingField, setNewMappingField] = useState({
         name: '',
@@ -103,8 +105,22 @@ const Create = () => {
     }, [data.mapping_config]);
 
     const updateFieldsConfig = (updatedFields) => {
-        setData('fields_config', JSON.stringify(updatedFields, null, 2));
-        setFields(updatedFields);
+        // Ensure only one field has is_slug true
+        let found = false;
+        const normalized = updatedFields.map((f) => {
+            if (f.is_slug && !found) {
+                found = true;
+                return { ...f, is_slug: true };
+            }
+            return { ...f, is_slug: false };
+        });
+        setData('fields_config', JSON.stringify(normalized, null, 2));
+        setFields(normalized);
+    };
+
+    const setSlugField = (index) => {
+        const updated = fields.map((f, i) => ({ ...f, is_slug: i === index }));
+        updateFieldsConfig(updated);
     };
 
     const updateMappingConfig = (updatedFields) => {
@@ -162,6 +178,7 @@ const Create = () => {
             label: newField.label,
             required: newField.required || false,
             placeholder: newField.placeholder || '',
+            is_slug: !!newField.is_slug,
         };
 
         if (newField.default) field.default = newField.default;
@@ -246,6 +263,7 @@ const Create = () => {
             placeholder: field.placeholder || '',
             options: field.options ? field.options.join(', ') : '',
             default: field.default || '',
+            is_slug: field.is_slug || false,
         });
         removeField(index);
     };
@@ -285,6 +303,7 @@ const Create = () => {
                 ...data,
                 fields_config: parsedFieldsConfig,
                 mapping_config: parsedMappingConfig,
+                map_to_module_ids: data.map_to_module_ids || [],
             });
         } catch (err) {
             if (err.message.includes('Mapping')) setMappingJsonError(err.message);
@@ -350,7 +369,7 @@ const Create = () => {
                                     onChange={(e) => setData('auto_generate_slug', e.target.checked)}
                                     role="switch"
                                 />
-                                <label className="form-check-label fw-medium">Auto-generate slug from name</label>
+                                <label className="form-check-label fw-medium">Auto-generate slug from module name</label>
                             </div>
                         </div>
                         <div className="col-md-6">
@@ -443,6 +462,40 @@ const Create = () => {
                                 ) : (
                                     <div className="text-muted small">No types added yet. Add types like Student, Parent, Teacher, etc.</div>
                                 )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Map to Modules - checkboxes for Mapping button */}
+                    <div className="border-top pt-3 mt-3">
+                        <h6 className="mb-2">Map to Modules</h6>
+                        <p className="text-muted small mb-2">When checked, entries of this module will have a Mapping button. The Mapping page shows Pages (always) plus entries from checked modules.</p>
+                        {(modules || []).length === 0 ? (
+                            <div className="text-muted small">No other modules available yet. Create modules first.</div>
+                        ) : (
+                            <div className="d-flex flex-wrap gap-3">
+                                {(modules || []).map((m) => {
+                                    const checked = (data.map_to_module_ids || []).includes(m.id);
+                                    return (
+                                        <div key={m.id} className="form-check">
+                                            <input
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                id={`map-module-${m.id}`}
+                                                checked={checked}
+                                                onChange={(e) => {
+                                                    const ids = data.map_to_module_ids || [];
+                                                    setData('map_to_module_ids', e.target.checked
+                                                        ? [...ids, m.id]
+                                                        : ids.filter((i) => i !== m.id));
+                                                }}
+                                            />
+                                            <label className="form-check-label" htmlFor={`map-module-${m.id}`}>
+                                                {m.name}
+                                            </label>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
@@ -547,6 +600,18 @@ const Create = () => {
                                 </div>
 
                                 <div className="col-md-12">
+                                    <div className="form-check">
+                                        <input
+                                            type="checkbox"
+                                            className="form-check-input"
+                                            checked={newField.is_slug}
+                                            onChange={(e) => setNewField({ ...newField, is_slug: e.target.checked })}
+                                        />
+                                        <label className="form-check-label">Use this field to generate entry slug</label>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-12">
                                     <button type="button" className="btn btn-primary" onClick={addField}>
                                         <i className="bx bx-plus me-2"></i>
                                         Add Field
@@ -572,6 +637,7 @@ const Create = () => {
                                                 <th>Label</th>
                                                 <th>Type</th>
                                                 <th>Required</th>
+                                                <th>Slug</th>
                                                 <th width="120">Actions</th>
                                             </tr>
                                         </thead>
@@ -588,6 +654,17 @@ const Create = () => {
                                                         ) : (
                                                             <span className="badge bg-secondary">Optional</span>
                                                         )}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        <div className="form-check">
+                                                            <input
+                                                                type="radio"
+                                                                name="slugField"
+                                                                className="form-check-input"
+                                                                checked={!!field.is_slug}
+                                                                onChange={() => setSlugField(index)}
+                                                            />
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <div className="btn-group btn-group-sm">

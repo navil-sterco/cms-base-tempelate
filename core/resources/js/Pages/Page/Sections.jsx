@@ -547,7 +547,7 @@ const SectionBuilder = () => {
                     <div>
                         {/* File Preview */}
                         {hasFile && (
-                            <div className="mb-2 p-2 border rounded bg-light">
+                            <div className="mb-2 p-2 border rounded">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <div className="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
                                         {fileValue ? getFileIcon(fileValue.type) : <ImageIcon size={16} />}
@@ -687,8 +687,6 @@ const SectionBuilder = () => {
             preserveScroll: true,
             onSuccess: () => {
                 setIsSaving(false);
-                toast.success("Sections saved successfully!");
-                // Reload to get updated data
                 setTimeout(() => {
                     router.reload({ only: ['activeSections', 'flash'] });
                 }, 1000);
@@ -812,13 +810,13 @@ const SectionBuilder = () => {
                                     return (
                                         <div
                                             key={sIndex}
-                                            className={`section-card border rounded ${draggedSection === sIndex ? 'dragging' : ''}`}
+                                            className={`section-card border rounded overflow-hidden ${draggedSection === sIndex ? 'dragging' : ''}`}
                                             draggable={isDraggable}
                                             onDragStart={(e) => handleSectionDragStart(e, sIndex)}
                                             onDragOver={handleSectionDragOver}
                                             onDrop={(e) => handleSectionDrop(e, sIndex)}
                                         >
-                                            <div className="section-header px-3 py-3 bg-light rounded-top">
+                                            <div className="section-header px-3 py-3 rounded-top">
                                                 <div className="d-flex align-items-center justify-content-between">
                                                     <div className="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
                                                         {isDraggable && (
@@ -860,7 +858,7 @@ const SectionBuilder = () => {
                                             </div>
 
                                             {!section.isCollapsed && selectedSection && (
-                                                <div className="p-3">
+                                                <div className="p-3 rounded-bottom">
                                                     <div className="row g-3">
                                                         {fields.length > 0 ? (
                                                             fields.map((field, fIndex) => {
@@ -937,8 +935,8 @@ const SectionBuilder = () => {
                                                                         {section.mapping_items.map((item, itemIndex) => {
                                                                             const mappingFields = selectedSection.mapping_config;
                                                                             return (
-                                                                                <div key={itemIndex} className="card border mb-3">
-                                                                                    <div className="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                                                                <div key={itemIndex} className="card border mb-3 overflow-hidden">
+                                                                                    <div className="card-header py-2 border-bottom d-flex justify-content-between align-items-center">
                                                                                         <div className="d-flex align-items-center gap-2">
                                                                                             <span className="fw-medium">Item {itemIndex + 1}</span>
                                                                                             <span className="badge bg-secondary">#{itemIndex + 1}</span>
@@ -1007,8 +1005,8 @@ const SectionBuilder = () => {
 
                                 {/* Component Picker */}
                                 {(showComponentPicker || sections.length === 0) && (
-                                    <div className="component-picker border rounded">
-                                        <div className="component-picker-header px-3 py-3 bg-light rounded-top">
+                                    <div className="component-picker border rounded overflow-hidden">
+                                        <div className="component-picker-header px-3 py-2 rounded-top border-bottom">
                                             <div className="d-flex align-items-center justify-content-between mb-3">
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Blocks size={18} className="text-dark" />
@@ -1060,7 +1058,7 @@ const SectionBuilder = () => {
                                                 Showing {filteredSections.length} of {availableSections.length} sections
                                             </div>
                                         </div>
-                                        <div className="p-3">
+                                        <div className="p-3 rounded-bottom">
                                             {filteredSections.length === 0 ? (
                                                 <div className="text-center py-4">
                                                     <Blocks size={40} className="text-muted mb-3" />

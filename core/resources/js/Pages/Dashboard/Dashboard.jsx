@@ -1,7 +1,8 @@
+import { usePage } from '@inertiajs/react';
 import React, { useEffect } from 'react'
 
 const Dashboard = () => {
-    
+     const { appUrl } = usePage().props;
     useEffect(() => {
         dashboardAnalitics();
     }, [])
@@ -32,7 +33,7 @@ const Dashboard = () => {
                             <div className="col-sm-5 text-center text-sm-left">
                                 <div className="card-body pb-0 px-0 px-md-4">
                                     <img aria-label='dashboard icon image'
-                                        src="/cms-base-template/assets/img/illustrations/man-with-laptop-light.png"
+                                        src={`${appUrl}assets/img/illustrations/man-with-laptop-light.png`}
                                         height="140"
                                         alt="View Badge User"
                                         data-app-dark-img="illustrations/man-with-laptop-dark.png"

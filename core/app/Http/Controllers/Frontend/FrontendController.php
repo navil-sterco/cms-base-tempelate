@@ -11,8 +11,8 @@ class FrontendController extends Controller
 {
     public function cmsPages($slug)
     {
-        $page = Page::published()->where('page_type','cms')->bySlug($slug)->firstOrFail();
-        
+        $page = Page::published()->where('page_type', 'cms')->bySlug($slug)->firstOrFail();
+
         return view('pages.show', [
             'page' => $page,
             'renderedHtml' => $page->getRenderedHtml()
@@ -21,24 +21,17 @@ class FrontendController extends Controller
 
     public function modularPages($slug)
     {
-        $entries = ModuleEntry::getData(13);
-        return $entries;
-
+        $entries = ModuleEntry::getData(26);
         $page = Page::published()
-            ->with(['degrees', 'sections' => function($query) {
-                $query->orderBy('order');
-            }])
             ->where('page_type', 'modular')
             ->bySlug($slug)
             ->firstOrFail();
-
-        $sectionsData = $page->sections->mapWithKeys(function ($section) use($page) {
-            return [$section->identifier => $page->getSectionHtml($section)];
-        })->toArray();
-
+    
+        $viewData = $page->getModularPageData();
+    
+        return $viewData; // for API
         return view('modular.' . $slug, array_merge([
-            'page' => $page,
-            'degrees' => $page->degrees,
-        ], $sectionsData));
+                'page' => $page,
+        ], $viewData));
     }
 }

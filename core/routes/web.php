@@ -69,8 +69,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('modules/{module}/entries', [ModuleEntryController::class, 'store'])->name('modules.entries.store');
     Route::get('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'show'])->name('modules.entries.show');
     Route::get('modules/{module}/entries/{entry}/edit', [ModuleEntryController::class, 'edit'])->name('modules.entries.edit');
-    Route::put('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'update'])->name('modules.entries.update');
+    Route::post('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'update'])->name('modules.entries.update');
     Route::delete('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'destroy'])->name('modules.entries.destroy');
+    Route::get('modules/{module}/entries/{entry}/mapping', [ModuleEntryController::class, 'mapping'])->name('modules.entries.mapping');
+    Route::post('modules/{module}/entries/{entry}/mapping', [ModuleEntryController::class, 'attachMapping'])->name('modules.entries.mapping.attach');
 
     // Sections
     Route::get('/pages/{page}/sections', [SectionBuilderController::class, 'sections'])->name('pages.sections');
@@ -82,12 +84,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::put('/pages/{page}/toggle-publish', [PageController::class, 'togglePublish'])->name('pages.toggle-publish');
     Route::get('/pages/{pageId}/sections', [SectionBuilderController::class, 'create'])->name('pages.sections.create');
 
-    Route::resource('images', ImageController::class)->except(['destroy','edit','update']);
+    Route::resource('images', ImageController::class)->except(['destroy', 'edit', 'update']);
     Route::get('/{image}/destroy', [ImageController::class, 'destroy'])->name('images.destroy');
 });
 
-    // Frontend route
-    Route::get('pages/{slug}', [FrontendController::class, 'cmsPages'])->name('pages.frontend.show');
-    Route::get('/modular/{slug}', [FrontendController::class, 'modularPages'])->name('pages.frontend.modular.show');
+// Frontend route
+Route::get('pages/{slug}', [FrontendController::class, 'cmsPages'])->name('pages.frontend.show');
+Route::get('/modular/{slug}', [FrontendController::class, 'modularPages'])->name('pages.frontend.modular.show');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

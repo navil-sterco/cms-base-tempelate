@@ -13,8 +13,8 @@
 
 		<!-- Main Content -->
 		<main class="main">
-			@isset($homesection2)
-                {!! $homesection2 !!}
+			@isset($name)
+                {!! $name !!}
             @endisset
 		</main>
 

@@ -11,6 +11,7 @@ const MappingPage = ({
     icon,
     backRoute,
     submitRoute,
+    submitRouteParams,
     lists,
     containerClass = "container py-4",
     submitText = "Save Mapping",
@@ -24,7 +25,8 @@ const MappingPage = ({
         initialMappings[list.field] = entity[relationshipKey]?.map((item) => item.id) || [];
     });
 
-    const { data, processing, errors, toggleItem, toggleAll, handleSubmit } = useMapping(entity, initialMappings);
+    const routeParams = submitRouteParams ?? entity.id;
+    const { data, processing, errors, toggleItem, toggleAll, handleSubmit } = useMapping(entity, initialMappings, routeParams);
 
     // Calculate total selected
     const totalSelected = Object.values(data).reduce(
@@ -62,7 +64,7 @@ const MappingPage = ({
                     )}
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit(submitRoute, entity.id)}>
+                    <form onSubmit={handleSubmit(submitRoute, routeParams)}>
                         <div className="row">
                             {lists.map((list) => {
                                 const selectedIds = data[list.field] || [];

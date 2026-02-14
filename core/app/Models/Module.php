@@ -14,6 +14,7 @@ class Module extends Model
         'fields_config',
         'mapping_config',
         'mapping_enabled',
+        'map_to_module_ids',
         'types_enabled',
         'types',
         'is_active',
@@ -22,6 +23,7 @@ class Module extends Model
     protected $casts = [
         'fields_config' => 'array',
         'mapping_config' => 'array',
+        'map_to_module_ids' => 'array',
         'mapping_enabled' => 'boolean',
         'auto_generate_slug' => 'boolean',
         'types_enabled' => 'boolean',
