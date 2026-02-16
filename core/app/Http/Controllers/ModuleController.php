@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\PageSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class ModuleController extends Controller
 {
@@ -41,8 +43,10 @@ class ModuleController extends Controller
     public function create()
     {
         $modules = Module::active()->orderBy('name')->get(['id', 'name', 'slug']);
+        $sections = PageSection::orderBy('name')->get(['id', 'name', 'identifier', 'fields_config', 'mapping_config', 'mapping_enabled']);
         return Inertia::render('Module/Create', [
             'modules' => $modules,
+            'sections' => $sections,
         ]);
     }
 
@@ -89,6 +93,8 @@ class ModuleController extends Controller
             'mapping_config.*.label' => 'required|string',
             'mapping_config.*.required' => 'boolean',
             'mapping_config.*.options' => 'nullable|array',
+            'page_section_ids' => 'nullable|array',
+            'page_section_ids.*' => 'integer|exists:page_sections,id',
             'map_to_module_ids' => 'nullable|array',
             'map_to_module_ids.*' => 'integer|exists:modules,id',
             'mapping_enabled' => 'boolean',
@@ -111,9 +117,11 @@ class ModuleController extends Controller
     public function edit(Module $module)
     {
         $modules = Module::active()->where('id', '!=', $module->id)->orderBy('name')->get(['id', 'name', 'slug']);
+        $sections = PageSection::orderBy('name')->get(['id', 'name', 'identifier', 'fields_config', 'mapping_config', 'mapping_enabled']);
         return Inertia::render('Module/Edit', [
             'module' => $module,
             'modules' => $modules,
+            'sections' => $sections,
         ]);
     }
 
@@ -160,6 +168,8 @@ class ModuleController extends Controller
             'mapping_config.*.label' => 'required|string',
             'mapping_config.*.required' => 'boolean',
             'mapping_config.*.options' => 'nullable|array',
+            'page_section_ids' => 'nullable|array',
+            'page_section_ids.*' => 'integer|exists:page_sections,id',
             'map_to_module_ids' => 'nullable|array',
             'map_to_module_ids.*' => 'integer|exists:modules,id',
             'mapping_enabled' => 'boolean',
@@ -181,9 +191,15 @@ class ModuleController extends Controller
 
     public function destroy(Module $module)
     {
-        // Delete all related entries (safety in addition to DB cascade)
+        $entryIds = $module->entries()->pluck('id')->toArray();
+        if (!empty($entryIds)) {
+            DB::table('module_entry_page')->whereIn('module_entry_id', $entryIds)->delete();
+            DB::table('module_entry_mapping')
+                ->whereIn('module_entry_id', $entryIds)
+                ->orWhereIn('related_module_entry_id', $entryIds)
+                ->delete();
+        }
         $module->entries()->delete();
-
         $module->delete();
 
         return redirect()->route('modules.index')

@@ -21,9 +21,15 @@
 	<body>
 		@include('includes.header')
 
-		<!-- Main Content -->
+		<!-- Main Content (section-wise: same data as renderedHtml) -->
 		<main class="main">
-			{!! $renderedHtml !!}
+			@if(!empty($sectionsHtml))
+				@foreach($sectionsHtml as $sectionHtml)
+					{!! $sectionHtml !!}
+				@endforeach
+			@else
+				{!! $renderedHtml !!}
+			@endif
 		</main>
 
 		@include('includes.footer')

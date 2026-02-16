@@ -4,11 +4,12 @@ import JsonEditor from '@/Components/Fields/JsonEditor';
 import TextInput from '@/Components/Form/TextInput';
 import { Type, Tag } from 'lucide-react';
 
-const Create = ({ modules = [] }) => {
+const Create = ({ modules = [], sections: availableSections = [] }) => {
     const { data, setData, post, errors, processing } = useForm({
         name: '',
         slug: '',
         auto_generate_slug: true,
+        page_section_ids: [],
         fields_config: '[]',
         mapping_config: '[]',
         mapping_enabled: false,
@@ -51,6 +52,7 @@ const Create = ({ modules = [] }) => {
         name: '',
         options: '',
     });
+    const [moduleSectionSearch, setModuleSectionSearch] = useState('');
 
     const fieldTypes = [
         { value: 'text', label: 'Text Input', icon: 'bx-text' },
@@ -304,6 +306,7 @@ const Create = ({ modules = [] }) => {
                 fields_config: parsedFieldsConfig,
                 mapping_config: parsedMappingConfig,
                 map_to_module_ids: data.map_to_module_ids || [],
+                page_section_ids: data.page_section_ids || [],
             });
         } catch (err) {
             if (err.message.includes('Mapping')) setMappingJsonError(err.message);
@@ -385,6 +388,98 @@ const Create = ({ modules = [] }) => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Page Sections: compact selector (modal with search) */}
+                    {availableSections.length > 0 && (
+                        <div className="border-top pt-3 mt-3">
+                            <h6 className="mb-2">Page Sections</h6>
+                            <p className="text-muted small mb-2">
+                                Optional. Add section data per entry via the <strong>Detail</strong> button on each entry (same as Page → Sections).
+                            </p>
+                            <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#module-section-picker-modal"
+                                >
+                                    <i className="bx bx-plus me-1"></i>
+                                    Select sections
+                                </button>
+                                {(data.page_section_ids || []).length > 0 && (
+                                    <span className="text-muted small">
+                                        ({(data.page_section_ids || []).length} selected)
+                                    </span>
+                                )}
+                            </div>
+                            {(data.page_section_ids || []).length > 0 && (
+                                <div className="d-flex flex-wrap gap-1">
+                                    {(data.page_section_ids || []).map((id) => {
+                                        const sec = availableSections.find((s) => s.id === id);
+                                        return (
+                                            <span key={id} className="badge bg-primary d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                                {sec?.name || id}
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-link p-0 border-0 bg-transparent text-white"
+                                                    style={{ fontSize: '1rem', lineHeight: 1 }}
+                                                    onClick={() => setData('page_section_ids', (data.page_section_ids || []).filter((x) => x !== id))}
+                                                    aria-label="Remove"
+                                                >
+                                                    &times;
+                                                </button>
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                            <div className="modal fade" id="module-section-picker-modal" tabIndex={-1}>
+                                <div className="modal-dialog modal-dialog-scrollable">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title">Select page sections</h5>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <input
+                                                type="text"
+                                                className="form-control mb-3"
+                                                placeholder="Search by name or identifier..."
+                                                value={moduleSectionSearch}
+                                                onChange={(e) => setModuleSectionSearch(e.target.value)}
+                                            />
+                                            <ul className="list-group list-group-flush">
+                                                {availableSections
+                                                    .filter((s) => !moduleSectionSearch.trim() || s.name.toLowerCase().includes(moduleSectionSearch.toLowerCase()) || (s.identifier || '').toLowerCase().includes(moduleSectionSearch.toLowerCase()))
+                                                    .map((section) => {
+                                                        const selected = (data.page_section_ids || []).includes(section.id);
+                                                        return (
+                                                            <li key={section.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span><strong>{section.name}</strong>{section.identifier && <small className="text-muted ms-1">({section.identifier})</small>}</span>
+                                                                <button
+                                                                    type="button"
+                                                                    className={selected ? 'btn btn-sm btn-outline-danger' : 'btn btn-sm btn-outline-primary'}
+                                                                    onClick={() => {
+                                                                        if (selected) {
+                                                                            setData('page_section_ids', (data.page_section_ids || []).filter((x) => x !== section.id));
+                                                                        } else {
+                                                                            setData('page_section_ids', [...(data.page_section_ids || []), section.id]);
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    {selected ? 'Remove' : 'Add'}
+                                                                </button>
+                                                            </li>
+                                                        );
+                                                    })}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {errors.page_section_ids && <div className="text-danger small mt-1">{errors.page_section_ids}</div>}
+                        </div>
+                    )}
 
                     {/* Types Configuration */}
                     <div className="border-top pt-3 mt-3">

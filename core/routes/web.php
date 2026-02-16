@@ -73,6 +73,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::delete('modules/{module}/entries/{entry}', [ModuleEntryController::class, 'destroy'])->name('modules.entries.destroy');
     Route::get('modules/{module}/entries/{entry}/mapping', [ModuleEntryController::class, 'mapping'])->name('modules.entries.mapping');
     Route::post('modules/{module}/entries/{entry}/mapping', [ModuleEntryController::class, 'attachMapping'])->name('modules.entries.mapping.attach');
+    Route::get('modules/{module}/entries/{entry}/detail', [ModuleEntryController::class, 'detail'])->name('modules.entries.detail');
+    Route::post('modules/{module}/entries/{entry}/detail', [ModuleEntryController::class, 'storeDetail'])->name('modules.entries.detail.store');
 
     // Sections
     Route::get('/pages/{page}/sections', [SectionBuilderController::class, 'sections'])->name('pages.sections');

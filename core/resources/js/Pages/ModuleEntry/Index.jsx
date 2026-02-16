@@ -13,6 +13,7 @@ const Index = ({ module, entries, searchTerm }) => {
     const [query, setQuery] = useState(searchTerm || '');
     useDebouncedSearch(query, route('modules.entries.index', module.id));
     useFlashMessage();
+    const hasSections = Array.isArray(module?.sections) && module.sections.length > 0;
 
     const fields = useMemo(() => (Array.isArray(module?.fields_config) ? module.fields_config : []), [module]);
     const listFields = useMemo(() => {
@@ -79,6 +80,11 @@ const Index = ({ module, entries, searchTerm }) => {
                             {entries.data.length > 0 ? (
                                 entries.data.map((entry) => {
                                     const actions = [
+                                        ...(hasSections ? [{
+                                            label: 'Detail',
+                                            icon: 'bx-detail',
+                                            href: route('modules.entries.detail', { module: module.id, entry: entry.id }),
+                                        }] : []),
                                         {
                                             label: 'Mapping',
                                             icon: 'bx-right-arrow-circle',
@@ -119,6 +125,15 @@ const Index = ({ module, entries, searchTerm }) => {
                                             ))}
                                             <td>
                                                 <div className="d-flex align-items-center gap-1">
+                                                    {hasSections && (
+                                                        <Link
+                                                            className="btn btn-sm btn-outline-secondary p-1"
+                                                            href={route('modules.entries.detail', { module: module.id, entry: entry.id })}
+                                                        >
+                                                            <i className="bx bx-detail me-1"></i>
+                                                            Detail
+                                                        </Link>
+                                                    )}
                                                     <Link
                                                         className="btn btn-sm btn-outline-primary p-1"
                                                         href={route('modules.entries.mapping', { module: module.id, entry: entry.id })}

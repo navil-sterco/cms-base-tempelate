@@ -11,6 +11,7 @@ class Module extends Model
         'name',
         'slug',
         'auto_generate_slug',
+        'page_section_ids',
         'fields_config',
         'mapping_config',
         'mapping_enabled',
@@ -23,6 +24,7 @@ class Module extends Model
     protected $casts = [
         'fields_config' => 'array',
         'mapping_config' => 'array',
+        'page_section_ids' => 'array',
         'map_to_module_ids' => 'array',
         'mapping_enabled' => 'boolean',
         'auto_generate_slug' => 'boolean',

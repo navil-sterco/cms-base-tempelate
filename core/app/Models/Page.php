@@ -82,6 +82,18 @@ class Page extends Model
         return $html;
     }
 
+    /**
+     * Return rendered HTML as an array of section HTML (same data as getRenderedHtml).
+     */
+    public function getRenderedHtmlBySections(): array
+    {
+        $sectionsHtml = [];
+        foreach ($this->sections as $section) {
+            $sectionsHtml[] = $this->getSectionHtml($section);
+        }
+        return $sectionsHtml;
+    }
+
     public function getSectionHtml($section)
     {
         $sectionHtml = $section->html_template;
@@ -135,32 +147,30 @@ class Page extends Model
 
         $mapped = [];
 
-        // Module data
+        // Module data: each entry includes data, section_data, and section_html (rendered)
         foreach ($this->moduleEntries as $entry) {
-
+            $entry->loadMissing('module');
             if ($entry->module && $entry->module->slug) {
-
                 $slug = $entry->module->slug;
-
                 if (!isset($mapped[$slug])) {
                     $mapped[$slug] = [];
                 }
-
-                $mapped[$slug][] = $entry->data ?? [];
+                $mapped[$slug][] = [
+                    'data' => $entry->data ?? [],
+                    'section_html' => $entry->getSectionDataRenderedHtml(),
+                ];
             }
-
-            // Related modules (optional but future-safe)
             foreach ($entry->relatedEntries as $related) {
-
+                $related->loadMissing('module');
                 if ($related->module && $related->module->slug) {
-
                     $relatedSlug = $related->module->slug;
-
                     if (!isset($mapped[$relatedSlug])) {
                         $mapped[$relatedSlug] = [];
                     }
-
-                    $mapped[$relatedSlug][] = $related->data ?? [];
+                    $mapped[$relatedSlug][] = [
+                        'data' => $related->data ?? [],
+                        'section_html' => $related->getSectionDataRenderedHtml(),
+                    ];
                 }
             }
         }

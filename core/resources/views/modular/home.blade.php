@@ -13,8 +13,8 @@
 
 		<!-- Main Content -->
 		<main class="main">
-			@isset($name)
-                {!! $name !!}
+			@isset($viewData)
+                {!! $viewData !!}
             @endisset
 		</main>
 

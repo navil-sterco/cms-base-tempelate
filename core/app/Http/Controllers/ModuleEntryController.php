@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Module;
 use App\Models\ModuleEntry;
 use App\Models\Page;
+use App\Models\PageSection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class ModuleEntryController extends Controller
@@ -57,16 +59,7 @@ class ModuleEntryController extends Controller
 
         return Inertia::render('ModuleEntry/Index', [
             'mappedModuleEntries' => $mappedModuleEntries,
-            'module' => [
-                'id' => $module->id,
-                'name' => $module->name,
-                'slug' => $module->slug,
-                'fields_config' => $module->fields_config,
-                'mapping_enabled' => (bool) $module->mapping_enabled,
-                'mapping_config' => $module->mapping_config,
-                'types_enabled' => (bool) ($module->types_enabled ?? false),
-                'types' => $module->types ?? [],
-            ],
+            'module' => $this->modulePayloadWithSections($module),
             'entries' => $entries,
             'searchTerm' => $search ?? '',
         ]);
@@ -77,16 +70,7 @@ class ModuleEntryController extends Controller
         $mappedModuleEntries = $this->getMappedModuleEntries($module->mapping_config ?? []);
 
         return Inertia::render('ModuleEntry/Create', [
-            'module' => [
-                'id' => $module->id,
-                'name' => $module->name,
-                'slug' => $module->slug,
-                'fields_config' => $module->fields_config ?? [],
-                'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
-                'mapping_config' => $module->mapping_config ?? [],
-                'types_enabled' => (bool) ($module->types_enabled ?? false),
-                'types' => $module->types ?? [],
-            ],
+            'module' => $this->modulePayloadWithSections($module),
             'mappedModuleEntries' => $mappedModuleEntries,
         ]);
     }
@@ -96,16 +80,7 @@ class ModuleEntryController extends Controller
         abort_unless($entry->module_id === $module->id, 404);
 
         return Inertia::render('ModuleEntry/Show', [
-            'module' => [
-                'id' => $module->id,
-                'name' => $module->name,
-                'slug' => $module->slug,
-                'fields_config' => $module->fields_config ?? [],
-                'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
-                'mapping_config' => $module->mapping_config ?? [],
-                'types_enabled' => (bool) ($module->types_enabled ?? false),
-                'types' => $module->types ?? [],
-            ],
+            'module' => $this->modulePayloadWithSections($module),
             'entry' => [
                 'id' => $entry->id,
                 'slug' => $entry->slug,
@@ -124,16 +99,7 @@ class ModuleEntryController extends Controller
         $mappedModuleEntries = $this->getMappedModuleEntries($module->mapping_config ?? []);
 
         return Inertia::render('ModuleEntry/Edit', [
-            'module' => [
-                'id' => $module->id,
-                'name' => $module->name,
-                'slug' => $module->slug,
-                'fields_config' => $module->fields_config ?? [],
-                'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
-                'mapping_config' => $module->mapping_config ?? [],
-                'types_enabled' => (bool) ($module->types_enabled ?? false),
-                'types' => $module->types ?? [],
-            ],
+            'module' => $this->modulePayloadWithSections($module),
             'entry' => [
                 'id' => $entry->id,
                 'slug' => $entry->slug,
@@ -155,7 +121,6 @@ class ModuleEntryController extends Controller
             $module->types ?? []
         );
 
-        // Add slug validation - must be unique per module
         $rules['slug'] = [
             'required',
             'string',
@@ -167,7 +132,6 @@ class ModuleEntryController extends Controller
             }
         ];
 
-        // Add file validation rules
         $fieldsConfig = $module->fields_config ?? [];
         foreach ($fieldsConfig as $field) {
             $name = $field['name'] ?? null;
@@ -176,7 +140,6 @@ class ModuleEntryController extends Controller
                 $rules["data.{$name}"] = 'nullable|file|mimes:jpg,jpeg,png,gif,svg,webp,mp4,avi,mov,ico,pdf,doc,docx|max:3000';
             }
         }
-        
         $mappingConfig = $module->mapping_config ?? [];
         foreach ($mappingConfig as $field) {
             $name = $field['name'] ?? null;
@@ -189,18 +152,14 @@ class ModuleEntryController extends Controller
         $validated = $request->validate($rules);
 
         $data = $validated['data'] ?? [];
-        
-        // Handle file uploads for regular fields
         foreach ($fieldsConfig as $field) {
             $name = $field['name'] ?? null;
             if (!$name) continue;
             if (in_array($field['type'] ?? 'text', ['file', 'image']) && $request->hasFile("data.{$name}")) {
                 $file = $request->file("data.{$name}");
-                $filePath = $this->uploadFile($file, $module->id);
-                $data[$name] = $filePath;
+                $data[$name] = $this->uploadFile($file, $module->id);
             }
         }
-        
         if ((bool) ($module->mapping_enabled ?? false)) {
             $mappingFields = $module->mapping_config ?? [];
             foreach ($mappingFields as $mf) {
@@ -210,8 +169,6 @@ class ModuleEntryController extends Controller
                 if (!is_array($data[$name])) {
                     $data[$name] = [];
                 }
-                
-                // Handle file uploads for mapping fields
                 if (in_array($mf['type'] ?? 'text', ['file', 'image']) && $request->hasFile("mapping_data.{$name}")) {
                     $files = $request->file("mapping_data.{$name}");
                     $uploadedPaths = [];
@@ -252,7 +209,6 @@ class ModuleEntryController extends Controller
             $module->types ?? []
         );
 
-        // Add slug validation - must be unique per module (but can be the same as current entry)
         $rules['slug'] = [
             'required',
             'string',
@@ -267,7 +223,6 @@ class ModuleEntryController extends Controller
             }
         ];
 
-        // Add file validation rules - for update, always allow nullable with custom validation
         $fieldsConfig = $module->fields_config ?? [];
         foreach ($fieldsConfig as $field) {
             $name = $field['name'] ?? null;
@@ -303,34 +258,23 @@ class ModuleEntryController extends Controller
                 ];
             }
         }
-        
         $mappingConfig = $module->mapping_config ?? [];
         foreach ($mappingConfig as $field) {
             $name = $field['name'] ?? null;
             if (!$name) continue;
             if (in_array($field['type'] ?? 'text', ['file', 'image'])) {
-                // File/image fields in mapping should also always be nullable
                 $rules["mapping_data.{$name}.*"] = [
                     'nullable',
                     function ($attribute, $value, $fail) {
-                        // Accept null/empty, strings (existing URLs), or files
-                        if ($value === null || $value === '') {
-                            return; // Valid
-                        }
-                        if (is_string($value)) {
-                            return; // Valid (existing file URL)
-                        }
+                        if ($value === null || $value === '') return;
+                        if (is_string($value)) return;
                         if ($value instanceof \Illuminate\Http\UploadedFile) {
-                            // Validate file
                             if (!in_array($value->getMimeType(), [
                                 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp',
                                 'video/mp4', 'video/x-msvideo', 'video/quicktime', 'image/x-icon',
                                 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                            ])) {
-                                $fail("The {$attribute} field has an invalid file type.");
-                            } elseif ($value->getSize() > 3000 * 1024) {
-                                $fail("The {$attribute} field must not exceed 3000 KB.");
-                            }
+                            ])) $fail("The {$attribute} field has an invalid file type.");
+                            elseif ($value->getSize() > 3000 * 1024) $fail("The {$attribute} field must not exceed 3000 KB.");
                             return;
                         }
                         $fail("The {$attribute} field must be a file or string.");
@@ -338,10 +282,9 @@ class ModuleEntryController extends Controller
                 ];
             }
         }
-        
+
         $validated = $request->validate($rules);
 
-        // Get the list of explicitly deleted files from frontend
         $deletedFiles = [];
         if ($request->has('_deleted_files')) {
             $deletedFiles = json_decode($request->input('_deleted_files', '[]'), true) ?? [];
@@ -432,11 +375,62 @@ class ModuleEntryController extends Controller
     {
         abort_unless($entry->module_id === $module->id, 404);
 
+        $entry->pages()->detach();
+        DB::table('module_entry_mapping')
+            ->where('module_entry_id', $entry->id)
+            ->orWhere('related_module_entry_id', $entry->id)
+            ->delete();
         $entry->delete();
 
         return redirect()
             ->route('modules.entries.index', $module->id)
             ->with('success', 'Entry deleted successfully!');
+    }
+
+    public function detail(Module $module, ModuleEntry $entry)
+    {
+        abort_unless($entry->module_id === $module->id, 404);
+        $pageSectionIds = $module->page_section_ids ?? [];
+        if (empty($pageSectionIds)) {
+            return redirect()->route('modules.entries.index', $module->id)
+                ->with('error', 'This module has no page sections configured.');
+        }
+
+        $payload = $this->modulePayloadWithSections($module);
+        $raw = $entry->section_data ?? $entry->data['sections'] ?? [];
+        $sectionData = is_array($raw) ? array_values($raw) : [];
+
+        return Inertia::render('ModuleEntry/Detail', [
+            'module' => ['id' => $module->id, 'name' => $module->name],
+            'entry' => [
+                'id' => $entry->id,
+                'slug' => $entry->slug,
+            ],
+            'sections' => $payload['sections'],
+            'sectionData' => $sectionData,
+        ]);
+    }
+
+    public function storeDetail(Request $request, Module $module, ModuleEntry $entry)
+    {
+        abort_unless($entry->module_id === $module->id, 404);
+        $pageSectionIds = $module->page_section_ids ?? [];
+        if (empty($pageSectionIds)) {
+            return redirect()->route('modules.entries.index', $module->id)->with('error', 'Module has no sections.');
+        }
+
+        $rules = $this->buildRulesForSectionData($module, true);
+        $validated = $request->validate($rules);
+        $entry->refresh();
+        $existingSections = is_array($entry->section_data) ? $entry->section_data : ($entry->data['sections'] ?? []);
+        $sectionData = $this->processSectionDataUploads($request, $validated['section_data'] ?? [], $module->id, $existingSections);
+
+        $entry->section_data = $sectionData;
+        $entry->save();
+
+        return redirect()
+            ->route('modules.entries.detail', ['module' => $module->id, 'entry' => $entry->id])
+            ->with('success', 'Section data saved successfully!');
     }
 
     public function mapping(Module $module, ModuleEntry $entry)
@@ -645,17 +639,104 @@ class ModuleEntryController extends Controller
     {
         $extension = $file->getClientOriginalExtension();
         $filename = 'module_' . time() . '_' . uniqid() . '.' . $extension;
-        
+
         $folder = 'assets/img/modules/' . $moduleId . '/';
         $path = public_path($folder);
-        
+
         if (!File::exists($path)) {
             File::makeDirectory($path, 0755, true);
         }
-        
+
         $file->move($path, $filename);
-        
+
         return asset($folder . $filename);
+    }
+
+    /** Return module array for Inertia with sections when module uses page_section_ids */
+    private function modulePayloadWithSections(Module $module): array
+    {
+        $payload = [
+            'id' => $module->id,
+            'name' => $module->name,
+            'slug' => $module->slug,
+            'fields_config' => $module->fields_config ?? [],
+            'mapping_enabled' => (bool) ($module->mapping_enabled ?? false),
+            'mapping_config' => $module->mapping_config ?? [],
+            'types_enabled' => (bool) ($module->types_enabled ?? false),
+            'types' => $module->types ?? [],
+        ];
+        $pageSectionIds = $module->page_section_ids ?? [];
+        if (!empty($pageSectionIds)) {
+            $sectionsById = PageSection::whereIn('id', $pageSectionIds)
+                ->get(['id', 'name', 'identifier', 'fields_config', 'mapping_config', 'mapping_enabled'])
+                ->keyBy('id');
+            $payload['sections'] = array_values(array_filter(array_map(function ($id) use ($sectionsById) {
+                return $sectionsById->get($id)?->toArray();
+            }, $pageSectionIds)));
+        } else {
+            $payload['sections'] = [];
+        }
+        return $payload;
+    }
+
+    /** Build validation rules for section_data when module uses page sections */
+    private function buildRulesForSectionData(Module $module, bool $forUpdate = false): array
+    {
+        $pageSectionIds = $module->page_section_ids ?? [];
+        return [
+            'section_data' => 'required|array',
+            'section_data.*' => 'array',
+            'section_data.*.section_id' => 'required|integer|in:' . implode(',', $pageSectionIds),
+            'section_data.*.data' => 'nullable|array',
+            'section_data.*.mapping_items' => 'nullable|array',
+            'section_data.*.mapping_items.*' => 'nullable|array',
+        ];
+    }
+
+    /** Process section_data: upload files and return array ready to store in entry.data.sections */
+    private function processSectionDataUploads(Request $request, array $sectionData, int $moduleId, array $existingSections = []): array
+    {
+        $result = [];
+        $sectionData = array_values($sectionData);
+        foreach ($sectionData as $index => $item) {
+            $item = is_array($item) ? $item : [];
+            $sectionId = $item['section_id'] ?? null;
+            $data = is_array($item['data'] ?? null) ? $item['data'] : [];
+            $mappingItems = is_array($item['mapping_items'] ?? null) ? $item['mapping_items'] : [];
+            $section = PageSection::find($sectionId);
+            if (!$section) continue;
+            $fieldsConfig = $section->fields_config ?? [];
+            $mappingConfig = $section->mapping_config ?? [];
+            $existing = $existingSections[$index] ?? [];
+            foreach ($fieldsConfig as $field) {
+                $name = $field['name'] ?? null;
+                if (!$name) continue;
+                if (in_array($field['type'] ?? 'text', ['file', 'image'])) {
+                    $key = "section_data.{$index}.data.{$name}";
+                    if ($request->hasFile($key)) {
+                        $data[$name] = $this->uploadFile($request->file($key), $moduleId);
+                    } elseif (!empty($existing['data'][$name] ?? '') && empty($data[$name])) {
+                        $data[$name] = $existing['data'][$name];
+                    }
+                }
+            }
+            foreach ($mappingItems as $miIndex => $mappingItem) {
+                foreach ($mappingConfig as $field) {
+                    $name = $field['name'] ?? null;
+                    if (!$name) continue;
+                    if (in_array($field['type'] ?? 'text', ['file', 'image'])) {
+                        $key = "section_data.{$index}.mapping_items.{$miIndex}.{$name}";
+                        if ($request->hasFile($key)) {
+                            $mappingItems[$miIndex][$name] = $this->uploadFile($request->file($key), $moduleId);
+                        } elseif (!empty($existing['mapping_items'][$miIndex][$name] ?? '') && empty($mappingItems[$miIndex][$name] ?? '')) {
+                            $mappingItems[$miIndex][$name] = $existing['mapping_items'][$miIndex][$name];
+                        }
+                    }
+                }
+            }
+            $result[] = ['section_id' => $sectionId, 'data' => $data, 'mapping_items' => $mappingItems];
+        }
+        return $result;
     }
 }
 
